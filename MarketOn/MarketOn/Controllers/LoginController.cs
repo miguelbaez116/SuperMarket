@@ -6,13 +6,17 @@ using System.Web.Mvc;
 
 namespace MarketOn.Controllers
 {
-    public class HomeController : Controller
+    public class LoginController : Controller
     {
-        public ActionResult Index()
-        {
-            var context = new DataMarketOn.MarketOnEntities();
 
+        public ActionResult Login()
+        {
             return View();
         }
-    }
+
+        public ActionResult Registro()
+        {
+            return View();
+        }
+	}
 }
