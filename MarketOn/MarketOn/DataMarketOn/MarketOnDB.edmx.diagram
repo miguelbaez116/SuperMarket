@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="672c9ce762424d89bbb70f5e8133f851" Name="Diagram1">
+        <EntityTypeShape EntityType="MarketOnModel.Categoria" Width="1.5" PointX="1.5" PointY="13.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MarketOnModel.DetalleListaCompra" Width="1.5" PointX="8.25" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MarketOnModel.FamiliaCode" Width="1.5" PointX="0.75" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MarketOnModel.Inventario" Width="1.5" PointX="3" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MarketOnModel.ListaCompra" Width="1.5" PointX="6" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MarketOnModel.Login" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MarketOnModel.Login_Detail" Width="1.5" PointX="3" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MarketOnModel.Producto" Width="1.5" PointX="0.75" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MarketOnModel.Usuario" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MarketOnModel.database_firewall_rules" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="MarketOnModel.FK__Producto__Catego__72C60C4A" ManuallyRouted="false" />
+        <AssociationConnector Association="MarketOnModel.FK__DetalleLi__Lista__797309D9" ManuallyRouted="false" />
+        <AssociationConnector Association="MarketOnModel.FK__DetalleLi__Produ__787EE5A0" ManuallyRouted="false" />
+        <AssociationConnector Association="MarketOnModel.FK__Inventari__Famil__7D439ABD" ManuallyRouted="false" />
+        <AssociationConnector Association="MarketOnModel.FK__ListaComp__Famil__6E01572D" ManuallyRouted="false" />
+        <AssociationConnector Association="MarketOnModel.FK__Usuario__Familia__6A30C649" ManuallyRouted="false" />
+        <AssociationConnector Association="MarketOnModel.FK__Inventari__Produ__7C4F7684" ManuallyRouted="false" />
+        <AssociationConnector Association="MarketOnModel.FK__Inventari__UserI__7E37BEF6" ManuallyRouted="false" />
+        <AssociationConnector Association="MarketOnModel.FK__ListaComp__UserI__6D0D32F4" ManuallyRouted="false" />
+        <AssociationConnector Association="MarketOnModel.FK__Login_Det__Login__6477ECF3" ManuallyRouted="false" />
+        <AssociationConnector Association="MarketOnModel.FK__Usuario__LoginId__693CA210" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

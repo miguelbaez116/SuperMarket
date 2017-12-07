@@ -43,6 +43,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -172,6 +174,57 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="DataMarketOn\Categoria.cs">
+      <DependentUpon>MarketOnDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataMarketOn\database_firewall_rules.cs">
+      <DependentUpon>MarketOnDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataMarketOn\DetalleListaCompra.cs">
+      <DependentUpon>MarketOnDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataMarketOn\FamiliaCode.cs">
+      <DependentUpon>MarketOnDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataMarketOn\Inventario.cs">
+      <DependentUpon>MarketOnDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataMarketOn\ListaCompra.cs">
+      <DependentUpon>MarketOnDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataMarketOn\Login.cs">
+      <DependentUpon>MarketOnDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataMarketOn\Login_Detail.cs">
+      <DependentUpon>MarketOnDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataMarketOn\MarketOnDB.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MarketOnDB.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataMarketOn\MarketOnDB.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MarketOnDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataMarketOn\MarketOnDB.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MarketOnDB.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="DataMarketOn\Producto.cs">
+      <DependentUpon>MarketOnDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataMarketOn\sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>MarketOnDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataMarketOn\sp_helpdiagrams_Result.cs">
+      <DependentUpon>MarketOnDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataMarketOn\Usuario.cs">
+      <DependentUpon>MarketOnDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -181,12 +234,29 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="DataMarketOn\MarketOnDB.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>MarketOnDB.edmx</DependentUpon>
+      <LastGenOutput>MarketOnDB.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="DataMarketOn\MarketOnDB.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>MarketOnDB.edmx</DependentUpon>
+      <LastGenOutput>MarketOnDB.cs</LastGenOutput>
+    </Content>
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <EntityDeploy Include="DataMarketOn\MarketOnDB.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>MarketOnDB.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="DataMarketOn\MarketOnDB.edmx.diagram">
+      <DependentUpon>MarketOnDB.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -223,6 +293,9 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

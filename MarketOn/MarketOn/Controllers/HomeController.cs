@@ -10,6 +10,10 @@ namespace MarketOn.Controllers
     {
         public ActionResult Index()
         {
+            var context = new DataMarketOn.MarketOnEntities();
+
+            var lista = context.Producto.ToList();
+
             return View();
         }
     }
