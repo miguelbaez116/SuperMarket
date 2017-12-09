@@ -14,9 +14,9 @@ namespace MarketOn.Controllers
             return View();
         }
 
-        public ActionResult Registro()
+        public PartialViewResult Registro()
         {
-            return View();
+            return PartialView();
         }
 	}
 }
