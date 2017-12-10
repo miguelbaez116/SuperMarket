@@ -1,28 +1,37 @@
-﻿@{
+﻿@model MarketOn.DataMarketOn.Usuario
+@{
     ViewBag.Title = "Registro";
-    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+    Layout = "~/Views/Shared/_BlankLayout.cshtml";
 }
-
-        <div class="Contenedor-Registro" style="display:inline-block">
-            <div class="form-group text-center">
-                <input type="text" class="form-control text-center" placeholder="Nombres" id="nombre">
-            </div>
-            <div class="form-group text-center">
-                <input type="text" class="form-control text-center" placeholder="Apellidos" id="apellido">
-            </div>
-            <div class="form-group text-center">
-                <input type="email" class="form-control text-center" placeholder="Correo Electronico" id="email">
-            </div>
-            <div class="form-group text-center">
-                <input type="text" class="form-control text-center" placeholder="Nombre Usuario" id="username">
-            </div>
-            <div class="form-group text-center">
-                <input type="password" class="form-control text-center" placeholder="Contraseña" id="password">
-            </div>
-            <div class="form-group text-center">
-                <input type="password" class="form-control text-center" placeholder="Confirmar Contraseña" id="confirmPassword">
-            </div>
-            <div class="form-group text-center">
-                <input type="text" class="form-control text-center" placeholder="Codigo Familia" id="familiaId">
-            </div>
+@using (Ajax.BeginForm("Registro", "Login",new AjaxOptions { UpdateTargetId = "Contenedor-Registro" }))
+{
+    <div class="Contenedor-Registro" style="display:inline-block" id="Contenedor-Registro">
+        <div class="form-group text-center col-md-6">
+            @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control text-center", placeholder = "Nombres" })
         </div>
+        <div class="form-group text-center col-md-6">
+            @Html.TextBoxFor(m => m.Apellido, new { @class = "form-control text-center", placeholder = "Apellidos" })
+        </div>
+        <div class="form-group text-center col-md-6">
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control text-center", placeholder = "Correo Electronico", type = "email" })
+        </div>
+        <div class="form-group text-center col-md-6">
+            @Html.TextBoxFor(m => m.Username, new { @class = "form-control text-center", placeholder = "Nombre Usuario" })
+        </div>
+        <div class="form-group text-center col-md-6">
+            @Html.TextBoxFor(m => m.Password, new { @class = "form-control text-center", placeholder = "Contraseña", type = "password" })
+        </div>
+        <div class="form-group text-center col-md-6">
+            <input type="password" class="form-control text-center" placeholder="Confirmar Contraseña" id="confirmPassword">
+        </div>
+        <div class="form-group text-center col-md-6">
+            @Html.TextBoxFor(m => m.FechaNacimiento, new { @class = "form-control text-center", placeholder = "Fecha de Nacimiento", type = "Date" })
+        </div>
+        <div class="form-group text-center col-md-6">
+            @Html.TextBoxFor(m => m.FamiliaCode, new { @class = "form-control text-center", placeholder = "Codigo Familiar" })
+        </div>
+        <div class="btn-group col-md-12">
+            <input type="submit" name="Registro" value="Registrate" class="btn btn-danger" id="btnRegistro" style="display: initial; max-width: 1000px; width:100%" />
+        </div>
+    </div>
+}
