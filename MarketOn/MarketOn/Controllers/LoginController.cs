@@ -23,7 +23,6 @@ namespace MarketOn.Controllers
         public ActionResult LoginValidator( string username, string password) {
             var db = new DataMarketOn.MarketOnEntities();
             var loginDetailsInfo = new Login_Detail();
-            var homeController = new HomeController();
 
             var validation = false;
 
@@ -33,17 +32,15 @@ namespace MarketOn.Controllers
             {
                 validation = true;
 
-                loginDetailsInfo.LoginId = result.LoginId;
-                loginDetailsInfo.Fecha = System.DateTime.Today;
-                db.Login_Detail.Add(loginDetailsInfo);
+                //loginDetailsInfo.LoginId = result.LoginId;
+                //loginDetailsInfo.Fecha = System.DateTime.Today;
+                //db.Login_Detail.Add(loginDetailsInfo);
 
-                db.SaveChanges();
+                //db.SaveChanges();
 
-                //var usuario = db.Usuario.Where(z => z.Username == result.Username).FirstOrDefault();
-
-                //ViewBag.Usuario = usuario;
-                //homeController.Index(usuario);
-            }
+                var usuario = db.Usuario.Where(z => z.Username == result.Username).FirstOrDefault();
+                Session.Add("Logeado", usuario.UserId);          
+           }
 
             return Json(validation);
         }

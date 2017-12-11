@@ -1,4 +1,5 @@
 ﻿using MarketOn.DataMarketOn;
+using MarketOn.Helpers;
 using MarketOn.Models;
 using System;
 using System.Collections.Generic;
@@ -10,12 +11,11 @@ namespace MarketOn.Controllers
 {
     public class HomeController : Controller
     {
+        [MiguelAuthorize]
         [HttpGet]
         public ActionResult Index() //Usuario usuario
         {
-            var usuario = new Usuario();
-            usuario.UserId = 3;
-            usuario.FamiliaId = 1;
+            var usuario = HttpContext.GetUsuario();
 
             var db = new DataMarketOn.MarketOnEntities();
             var MOM = new MothesOfModels
