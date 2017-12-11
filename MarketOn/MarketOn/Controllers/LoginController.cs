@@ -22,11 +22,44 @@ namespace MarketOn.Controllers
 
         public ActionResult LoginValidator( string username, string password) {
             var db = new DataMarketOn.MarketOnEntities();
+            var loginDetailsInfo = new Login_Detail();
+            var homeController = new HomeController();
+
             var validation = false;
 
             var result = db.Login.Where(x => (x.Username == username && x.Password == password) || (x.Email == username && x.Password == password)).FirstOrDefault();
 
-            if (result != null){ validation = true;}
+            if (result != null)
+            {
+                validation = true;
+
+                loginDetailsInfo.LoginId = result.LoginId;
+                loginDetailsInfo.Fecha = System.DateTime.Today;
+                db.Login_Detail.Add(loginDetailsInfo);
+
+                db.SaveChanges();
+
+                //var usuario = db.Usuario.Where(z => z.Username == result.Username).FirstOrDefault();
+
+                //ViewBag.Usuario = usuario;
+                //homeController.Index(usuario);
+            }
+
+            return Json(validation);
+        }
+
+        public ActionResult UserValidator(string username)
+        {
+            var db = new DataMarketOn.MarketOnEntities();
+
+            var validation = false;
+
+            var result = db.Login.Where(x => (x.Username == username)).FirstOrDefault();
+
+            if (result == null)
+            {
+                validation = true;          
+            }
 
             return Json(validation);
         }
@@ -36,7 +69,6 @@ namespace MarketOn.Controllers
         {
             var db = new DataMarketOn.MarketOnEntities();
             var loginInfo = new Login();
-            var loginDetailsInfo = new Login_Detail();
 
             db.Usuario.Add(usuario);
 
@@ -45,14 +77,7 @@ namespace MarketOn.Controllers
             loginInfo.Email = usuario.Email;
             db.Login.Add(loginInfo);
 
-            db.SaveChanges();
-
-            var idLogin = (from x in db.Login orderby x.LoginId descending select x).First();
-            loginDetailsInfo.LoginId = idLogin.LoginId;
-            loginDetailsInfo.Fecha = System.DateTime.Today;
-            db.Login_Detail.Add(loginDetailsInfo);
-
-            db.SaveChanges();
+            db.SaveChanges();          
 
             return PartialView("~/Views/Login/Login.cshtml");
         }

@@ -3,35 +3,35 @@
     ViewBag.Title = "Registro";
     Layout = "~/Views/Shared/_BlankLayout.cshtml";
 }
-@using (Ajax.BeginForm("Registro", "Login",new AjaxOptions { UpdateTargetId = "Contenedor-Registro" }))
+@using (Ajax.BeginForm("Registro", "Login", new AjaxOptions { UpdateTargetId = "Contenedor-Registro" }))
 {
-    <div class="Contenedor-Registro" style="display:inline-block" id="Contenedor-Registro">
+    <form class="Contenedor-Registro" style="display:inline-block" id="Contenedor-Registro" data-toggle="validator">
         <div class="form-group text-center col-md-6">
-            @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control text-center", placeholder = "Nombres" })
+            @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control text-center", placeholder = "Nombres", required = true })
         </div>
         <div class="form-group text-center col-md-6">
-            @Html.TextBoxFor(m => m.Apellido, new { @class = "form-control text-center", placeholder = "Apellidos" })
+            @Html.TextBoxFor(m => m.Apellido, new { @class = "form-control text-center", placeholder = "Apellidos", required = true })
         </div>
         <div class="form-group text-center col-md-6">
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control text-center", placeholder = "Correo Electronico", type = "email" })
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control text-center", placeholder = "Correo Electronico", type = "email", required = true })
         </div>
         <div class="form-group text-center col-md-6">
-            @Html.TextBoxFor(m => m.Username, new { @class = "form-control text-center", placeholder = "Nombre Usuario" })
+            @Html.TextBoxFor(m => m.Username, new { @class = "form-control text-center", placeholder = "Nombre Usuario", id = "usernameReg", required = true })
         </div>
         <div class="form-group text-center col-md-6">
-            @Html.TextBoxFor(m => m.Password, new { @class = "form-control text-center", placeholder = "Contraseña", type = "password" })
+            @Html.TextBoxFor(m => m.Password, new { @class = "form-control text-center", placeholder = "Contraseña", type = "password", id = "passwordReg", required = true })
         </div>
         <div class="form-group text-center col-md-6">
-            <input type="password" class="form-control text-center" placeholder="Confirmar Contraseña" id="confirmPassword">
+            <input type="password" class="form-control text-center" placeholder="Confirmar Contraseña" id="confirmPassword" required>
+        </div>
+        <div class="form-group text-center col-md-6" id="fechaNacimiento">
+            @Html.TextBoxFor(m => m.FechaNacimiento, new { @class = "form-control text-center", placeholder = "Fecha de Nacimiento", type = "Date", required = true })
         </div>
         <div class="form-group text-center col-md-6">
-            @Html.TextBoxFor(m => m.FechaNacimiento, new { @class = "form-control text-center", placeholder = "Fecha de Nacimiento", type = "Date" })
-        </div>
-        <div class="form-group text-center col-md-6">
-            @Html.TextBoxFor(m => m.FamiliaCode, new { @class = "form-control text-center", placeholder = "Codigo Familiar" })
+            @Html.TextBoxFor(m => m.FamiliaCode, new { @class = "form-control text-center", placeholder = "Codigo Familiar", required = true })
         </div>
         <div class="btn-group col-md-12">
-            <input type="submit" name="Registro" value="Registrate" class="btn btn-danger" id="btnRegistro" style="display: initial; max-width: 1000px; width:100%" />
+            <input type="button" name="Registro" value="Registrate" class="btn btn-danger" id="Registro" style="display: initial; max-width: 1000px; width:100%" />
         </div>
-    </div>
+    </form>
 }

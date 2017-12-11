@@ -1,4 +1,5 @@
-﻿@{
+﻿@model MarketOn.Models.MothesOfModels
+@{
     ViewBag.Title = "MarketOn";
 }
 
@@ -17,30 +18,18 @@
                 <tr>
                     <th style="text-align:center">Nombre</th>
                     <th style="text-align:center">Cantidad</th>
-                    <th style="text-align:center">Estado</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Nombre 1</td>
-                    <td>Cantidad 1</td>
-                    <td>Estado 1</td>
-                </tr>
-                <tr>
-                    <td>Nombre 1</td>
-                    <td>Cantidad 1</td>
-                    <td>Estado 1</td>
-                </tr>
-                <tr>
-                    <td>Nombre 1</td>
-                    <td>Cantidad 1</td>
-                    <td>Estado 1</td>
-                </tr>
-                <tr>
-                    <td>Nombre 1</td>
-                    <td>Cantidad 1</td>
-                    <td>Estado 1</td>
-                </tr>
+                @{
+                    foreach (var listaProductos in Model.ListaProducto)
+                    {
+                        <tr>
+                            <td>@listaProductos.ProductoNombre</td>
+                            <td>@listaProductos.Stock</td>
+                        </tr>
+                    }
+                }
             </tbody>
         </table>
     </div>

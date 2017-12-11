@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Login";
     Layout = "~/Views/Shared/_LoginLayout.cshtml";
-    
+
 }
 <div class="container" style="text-align: center">
     <div style="margin-bottom: 2.5%; width:100%">
@@ -14,18 +14,17 @@
         <div class="text-center" style="width:100%">
             <div style="width:100%">
                 <div class="text-center" style="width:100%">
-                    <div class="form-group" >
+                    <div class="form-group">
                         <input type="text" class="form-control text-center" placeholder="Username o Email" id="username" style="display:initial" required>
                     </div>
                     <div class="form-group">
                         <input type="password" class="form-control text-center" placeholder="Password" id="password" style="display: initial" required>
                     </div>
                 </div>
-                <div style="margin-top: 2.5%; style="width:100%"" class="row" >
+                <div style="margin-top: 2.5%;" class="row">
                     <div class="col-md-5"></div>
                     <div class="col-md-2">
-                        @*@Html.ActionLink("Login", "Index", "Home", null, new { @class = "btn btn-danger col-md-12" })*@
-                        <a href="#" id="btnLogin" class = "btn btn-danger col-md-12">Login</a>
+                        <a href="#" id="btnLogin" class="btn btn-danger col-md-12">Login</a>
                         <p>Aun No Formas Parte? <a href="#" id="btnRegistro">Unete!</a></p>
                     </div>
                     <div class="col-md-5"></div>
@@ -40,7 +39,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">Registro</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <button type="button" style="position: absolute;top: 20px;left: 90%;" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body" id="ContenedorModal" style="display:flex"></div>
             </div>
@@ -55,28 +54,28 @@
 
                 var username = $("#username").val();
                 var password = $("#password").val();
-                
-                    $.ajax({
-                        url: "/Login/LoginValidator",
-                        type: "POST",
-                        data: JSON.stringify({ 'username': username, 'password': password }),
-                        dataType: "json",
-                        traditional: true,
-                        contentType: "application/json; charset=utf-8",
-                        success: function (data) {
-                            if (data == true) {
-                                window.location.href = '/Home/Index';                              
-                            } else {
-                                alert("Favor Verificar Usuario y Contraseña");
-                                return;
-                            }
-                        },
-                        error: function () {
-                            alert("Error en el BackEnd!!");
+
+                $.ajax({
+                    url: "/Login/LoginValidator",
+                    type: "POST",
+                    data: JSON.stringify({ 'username': username, 'password': password }),
+                    dataType: "json",
+                    traditional: true,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        if (data == true) {
+                            window.location.href = '/Home/Index';
+                        } else {
+                            alert("Favor Verificar Usuario y Contraseña");
+                            return;
                         }
-                    });
+                    },
+                    error: function () {
+                        alert("Error en el BackEnd!!");
+                    }
+                });
             });
-        });  
+        });
 
         $(document).ready(function () {
             $("#btnRegistro").click(function () {
@@ -84,8 +83,62 @@
 
                 $("#ContenedorModal").load(ruta, function () {
                     $("#myModal").modal("show")
+                    Prueba();
                 });
             });
-        });  
+        });
+        function Prueba() {
+
+            var userValidator = false;
+            var passwordValidator = false;
+
+            $(document).ready(function () {
+                $("#confirmPassword").change(function () {
+                    passwordValidator = true;
+                    if (this.value != $("#passwordReg").val()) {
+                        passwordValidator = false
+                        alert("Favor Confirmar Contraseña");
+                        return;
+                    }
+                });
+            });
+
+            $(document).ready(function () {
+                $("#usernameReg").change(function () {
+
+                    var usernameReg = this.value;
+                    userValidator = true;
+                    $.ajax({
+                        url: "/Login/UserValidator",
+                        type: "POST",
+                        data: JSON.stringify({ 'username': usernameReg }),
+                        dataType: "json",
+                        traditional: true,
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            if (data == false) {
+                                userValidator = false
+                                alert("Favor Verificar Usuario");
+                                return;
+                            }
+                        },
+                        error: function () {
+                            alert("Error en el BackEnd!!");
+                        }
+                    });
+                });
+            });
+
+            $(document).ready(function () {
+                $("#Registro").click(function (event) {
+                    if (userValidator == true && passwordValidator == true) {
+                        $("form").submit();
+                    } else {
+                        alert("Favor Verificar Usuario o Contraseña");
+                        return;
+                    }
+                });
+            });
+        }
     </script>
 }
