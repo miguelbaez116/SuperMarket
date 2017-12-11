@@ -4,6 +4,11 @@
     Layout = "~/Views/Shared/_LoginLayout.cshtml";
 
 }
+<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/alertify.min.js"></script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/css/alertify.min.css" />
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/css/alertify.rtl.min.css" />
+
+
 <div class="container" style="text-align: center">
     <div style="margin-bottom: 2.5%; width:100%">
         <div class="col-md-12 text-center">
@@ -49,6 +54,8 @@
 </div>
 @section scripts{
     <script type="text/javascript">
+        alertify.set('notifier', 'position', 'bottom-left');
+
         $(document).ready(function () {
             $("#btnLogin").click(function (event) {
 
@@ -66,7 +73,7 @@
                         if (data == true) {
                             window.location.href = '/Home/Index';
                         } else {
-                            alert("Favor Verificar Usuario y Contraseña");
+                            alertify.error('Usuario o Contraseña Incorrectos');
                             return;
                         }
                     },
@@ -97,7 +104,8 @@
                     passwordValidator = true;
                     if (this.value != $("#passwordReg").val()) {
                         passwordValidator = false
-                        alert("Favor Confirmar Contraseña");
+                        alertify.error('Favor Confirmar Contraseñas');
+                        $("#passwordReg").empty();
                         return;
                     }
                 });
@@ -118,9 +126,11 @@
                         success: function (data) {
                             if (data == false) {
                                 userValidator = false
-                                alert("Favor Verificar Usuario");
+                                alertify.error('Username Ocupado');
+                                $("#usernameReg").empty();
                                 return;
                             }
+                            alertify.success('Username Valido');
                         },
                         error: function () {
                             alert("Error en el BackEnd!!");
@@ -133,8 +143,10 @@
                 $("#Registro").click(function (event) {
                     if (userValidator == true && passwordValidator == true) {
                         $("form").submit();
+                        alertify.success('Registrado Con Exito!');
+
                     } else {
-                        alert("Favor Verificar Usuario o Contraseña");
+                        alertify.error('Favor Validar Campos.');
                         return;
                     }
                 });

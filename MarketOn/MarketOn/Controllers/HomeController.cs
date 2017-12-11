@@ -13,7 +13,7 @@ namespace MarketOn.Controllers
     {
         [MiguelAuthorize]
         [HttpGet]
-        public ActionResult Index() //Usuario usuario
+        public ActionResult Index()
         {
             var usuario = HttpContext.GetUsuario();
 

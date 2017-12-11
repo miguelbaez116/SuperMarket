@@ -1,7 +1,130 @@
-﻿
+﻿@model MarketOn.Models.MothesOfModels
 @{
     ViewBag.Title = "ConsultarLista";
 }
+<style>
 
-<h2>ConsultarLista</h2>
+    .panel.with-nav-tabs .panel-heading {
+        padding: 5px 5px 0 5px;
+    }
+
+    .panel.with-nav-tabs .nav-tabs {
+        border-bottom: none;
+    }
+
+    .panel.with-nav-tabs .nav-justified {
+        margin-bottom: -1px;
+    }
+    /********************************************************************/
+    /*** PANEL DANGER ***/
+    .with-nav-tabs.panel-danger .nav-tabs > li > a,
+    .with-nav-tabs.panel-danger .nav-tabs > li > a:hover,
+    .with-nav-tabs.panel-danger .nav-tabs > li > a:focus {
+        color: #a94442;
+    }
+
+        .with-nav-tabs.panel-danger .nav-tabs > .open > a,
+        .with-nav-tabs.panel-danger .nav-tabs > .open > a:hover,
+        .with-nav-tabs.panel-danger .nav-tabs > .open > a:focus,
+        .with-nav-tabs.panel-danger .nav-tabs > li > a:hover,
+        .with-nav-tabs.panel-danger .nav-tabs > li > a:focus {
+            color: #a94442;
+            background-color: #ebccd1;
+            border-color: transparent;
+        }
+
+    .with-nav-tabs.panel-danger .nav-tabs > li.active > a,
+    .with-nav-tabs.panel-danger .nav-tabs > li.active > a:hover,
+    .with-nav-tabs.panel-danger .nav-tabs > li.active > a:focus {
+        color: #a94442;
+        background-color: #fff;
+        border-color: #ebccd1;
+        border-bottom-color: transparent;
+    }
+
+    .with-nav-tabs.panel-danger .nav-tabs > li.dropdown .dropdown-menu {
+        background-color: #f2dede; /* bg color */
+        border-color: #ebccd1; /* border color */
+    }
+
+        .with-nav-tabs.panel-danger .nav-tabs > li.dropdown .dropdown-menu > li > a {
+            color: #a94442; /* normal text color */
+        }
+
+            .with-nav-tabs.panel-danger .nav-tabs > li.dropdown .dropdown-menu > li > a:hover,
+            .with-nav-tabs.panel-danger .nav-tabs > li.dropdown .dropdown-menu > li > a:focus {
+                background-color: #ebccd1; /* hover bg color */
+            }
+
+        .with-nav-tabs.panel-danger .nav-tabs > li.dropdown .dropdown-menu > .active > a,
+        .with-nav-tabs.panel-danger .nav-tabs > li.dropdown .dropdown-menu > .active > a:hover,
+        .with-nav-tabs.panel-danger .nav-tabs > li.dropdown .dropdown-menu > .active > a:focus {
+            color: #fff; /* active text color */
+            background-color: #a94442; /* active bg color */
+        }
+
+
+
+</style>
+
+<div class="row">
+    <div class="panel with-nav-tabs panel-danger">
+        <div class="panel-heading">
+            <ul class="nav nav-tabs">
+                <li class="active text-center" style="width:50%;"><a href="#listaPersonal" data-toggle="tab">Lista Personal</a></li>
+                <li class="text-center" style="width:50%;"><a href="#listaFamiliar" data-toggle="tab">Lista Familiar</a></li>                
+            </ul>
+        </div>
+        <div class="panel-body">
+            <div class="tab-content">
+                <div class="tab-pane fade in active" id="listaPersonal">
+                    <table class="table table-responsive text-center ">
+                        <thead>
+                            <tr>
+                                <th style="text-align:center">Nombre Lista</th>
+                                <th style="text-align:center">Fecha</th>
+                                <th style="text-align:center">Detalle</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (var lista in Model.ListaCompraPersonal)
+                                {
+                                    <tr>
+                                        <td>@lista.SupermercadoNombre</td>
+                                        <td>@lista.Fecha</td>
+                                        <td>@Html.ActionLink("Detalle Listas", "DetalleLista", "Complemento",null, new { id=@lista.ListaCompraId})</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="listaFamiliar">
+                    <table class="table table-responsive text-center ">
+                        <thead>
+                            <tr>
+                                <th style="text-align:center">Nombre Lista</th>
+                                <th style="text-align:center">Fecha</th>
+                                <th style="text-align:center">Detalle</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (var lista in Model.ListaCompraFamiliar)
+                                {
+                                    <tr>
+                                        <td>@lista.SupermercadoNombre</td>
+                                        <td>@lista.Fecha</td>
+                                        <td>@Html.ActionLink("Detalle Listas", "DetalleLista", "Complemento", null,new { id = @lista.ListaCompraId })</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
