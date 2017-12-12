@@ -21,7 +21,7 @@ namespace MarketOn.Controllers
             var db = new DataMarketOn.MarketOnEntities();
             var MOM = new MothesOfModels
             {
-                ListaCompraFamiliar = db.ListaCompra.Where(c => c.FamiliaId == usuario.FamiliaId).ToList(),
+                ListaCompraFamiliar = db.ListaCompra.Where(c => c.FamiliaId == usuario.FamiliaId && c.FamiliaId != null).ToList(),
                 ListaCompraPersonal = db.ListaCompra.Where(z => z.UserId == usuario.UserId).ToList(),
                 Usuario = usuario,
             };
@@ -33,6 +33,7 @@ namespace MarketOn.Controllers
         public ActionResult DetalleLista(int id)
         {
             var db = new DataMarketOn.MarketOnEntities();
+            var usuario = HttpContext.GetUsuario();
 
             var MOM = new MothesOfModels
             {
@@ -41,7 +42,8 @@ namespace MarketOn.Controllers
                                  join LC in db.ListaCompra on DC.ListaCompraId equals LC.ListaCompraId
                                  where LC.ListaCompraId == id
                                  select P).ToList(),
-                ListaCompra = db.ListaCompra.Where(l => l.ListaCompraId == id).FirstOrDefault()
+                ListaCompra = db.ListaCompra.Where(l => l.ListaCompraId == id).FirstOrDefault(),
+                Usuario = usuario
             };
             return View(MOM);
         }

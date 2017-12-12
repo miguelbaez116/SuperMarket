@@ -28,9 +28,52 @@ namespace MarketOn.Controllers
                                  select P).ToList(),
 
                 Usuario = usuario,
+                ListaCategorias = db.Categoria.ToList(),
+                ListaProductos = db.Producto.ToList()
     
             };
             return View(MOM);
+        }
+
+        public ActionResult CrearProducto(string nombreProducto, string categoriaId)
+        {
+            var db = new DataMarketOn.MarketOnEntities();
+            var idCategoria = Int32.Parse(categoriaId);
+            var producto = new Producto();
+            var validacion = true;
+
+            producto.ProductoNombre = nombreProducto;
+            producto.CategoriaId = idCategoria;
+            producto.Estado = "N/A";
+            producto.Precio = 0;
+            producto.Stock = 4;
+
+            db.Producto.Add(producto);
+            db.SaveChanges();
+
+            return Json(new { validacion, url = Url.Action("Index", "Home") });
+
+        }
+
+        public ActionResult AgregarProducto(string productoId)
+        {
+            var db = new DataMarketOn.MarketOnEntities();
+            var idProducto = Int32.Parse(productoId);
+
+            var inventario = new Inventario();
+            var validacion = true;
+            var usuario = HttpContext.GetUsuario();
+
+            inventario.ProductoId = idProducto;
+            inventario.FamiliaId = usuario.FamiliaId;
+            inventario.UserId = usuario.UserId;
+            inventario.Cantidad = 2;
+
+            db.Inventario.Add(inventario);
+            db.SaveChanges();
+
+            return Json(new { validacion, url = Url.Action("Index", "Home") });
+
         }
 
         [HttpPost]

@@ -3,11 +3,24 @@
     ViewBag.Title = "MarketOn";
 }
 
-
+<style>
+    .InputFull {
+        display: initial;
+        max-width: 1000px;
+        width: 100%;
+    }
+</style>
 <div class="row">
     <h1 class="text-center">MarketOn</h1>
 </div>
-
+<div class="row">
+    <div class="col-md-6">
+        <input type="button" name="crearProducto" id="btnCrearProducto" value="Crear Producto" class="btn btn-danger" style=" width: 100%; max-width: 1000px;"/>
+    </div>
+    <div class="col-md-6">
+        <input type="button" name="anadirProducto" id="btnAnadirProducto" value="Agregar Producto a Inventario" class="btn btn-danger" style="width: 100%; max-width: 1000px;" />
+    </div>
+</div>
 <div class="row">
     <div class="text-center">
         <h3> Productos en Inventario</h3>
@@ -34,3 +47,127 @@
         </table>
     </div>
 </div>
+
+<div class="modal fade" id="modalCrearProducto">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center"></h4>
+                <button type="button" style="position: absolute;top: 20px;left: 90%;" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" id="ContenedorModal-CrearProducto" style="display:flex;">
+                <form class="Contenedor-Crear" style="display:inline-block; width:100%" id="Contenedor-Registro" data-toggle="validator">
+                    <div class="form-group text-center col-md-8">
+                        <h4>Nombre del Producto</h4>
+                        <input type="text" name="nombreProducto" class="form-control text-center" id="nombreProducto" style="display: initial; max-width: 1000px; width:100%" />
+                    </div>
+                    <div class="form-group text-center col-md-4">
+                        <h4>Categoria Producto</h4>
+                        @Html.DropDownListFor(m => m.Categoria.CategoriaId, new SelectList(@Model.ListaCategorias, "CategoriaId", "CategoriaNombre"), "Seleccione...", new { @class = "form-control" })
+                    </div>
+                    <div class="btn-group col-md-12">
+                        <input type="button" name="CrearProducto" value="Crear Producto" class="btn btn-danger" id="crearProducto" style="display: initial; max-width: 1000px; width:100%" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalAnadirProducto">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center"></h4>
+                <button type="button" style="position: absolute;top: 20px;left: 90%;" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" id="ContenedorModal-AnadirProducto" style="display:flex;">
+                <form class="Contenedor-Crear" style="display:inline-block; width:100%" id="Contenedor-Registro" data-toggle="validator">
+                    <div class="form-group text-center">
+                        <h4>Lista Producto</h4>
+                        @Html.DropDownListFor(m => m.Producto.ProductoId, new SelectList(@Model.ListaProductos, "ProductoId", "ProductoNombre"), "Seleccione...", new { @class = "form-control text-center InputFull" })
+                    </div>
+                    <div class="btn-group col-md-12">
+                        <input type="button" name="anadirProducto" value="Agregar Producto" class="btn btn-danger InputFull" id="anadirProducto" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script type="text/javascript">
+        alertify.set('notifier', 'position', 'bottom-left');
+        var baseUrl = $("base").attr("href");
+
+        $(document).ready(function () {
+            $("#btnCrearProducto").click(function (e) {
+                e.preventDefault();
+                $("#modalCrearProducto").modal("show")
+            });
+        });
+
+        $(document).ready(function () {
+            $("#btnAnadirProducto").click(function (e) {
+                e.preventDefault();
+                $("#modalAnadirProducto").modal("show")
+            });
+        });
+
+        $(document).ready(function () {
+            $("#crearProducto").click(function (e) {
+                e.preventDefault();
+
+                var categoriaId = $("#Categoria_CategoriaId").val();
+                var nombreProducto = $("#nombreProducto").val();
+
+                $.ajax({
+                    url: baseUrl + "Home/CrearProducto",
+                    type: "POST",
+                    data: JSON.stringify({ 'nombreProducto': nombreProducto, 'categoriaId': categoriaId }),
+                    dataType: "json",
+                    traditional: true,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        if (data.validacion == true) {
+                            alertify.success('Producto Creado Correctamente!');
+                            window.location.href = data.url;
+                        }
+                    },
+                    error: function () {
+                        alertify.error("Error Creando Producto!");
+                    }
+                });
+            });
+        });
+
+        $(document).ready(function () {
+            $("#anadirProducto").click(function (e) {
+                e.preventDefault();
+
+                var productoId = $("#Producto_ProductoId").val();
+
+                $.ajax({
+                    url: baseUrl + "Home/AgregarProducto",
+                    type: "POST",
+                    data: JSON.stringify({ 'productoId': productoId }),
+                    dataType: "json",
+                    traditional: true,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        if (data.validacion == true) {
+                            alertify.success('Producto Agregado Correctamente!');
+                            window.location.href = data.url;
+                        }
+                    },
+                    error: function () {
+                        alertify.error("Error Agregando Producto!");
+                    }
+                });
+            });
+        });
+
+        </script>
+        }
