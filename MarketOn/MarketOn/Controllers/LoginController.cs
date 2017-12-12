@@ -42,7 +42,7 @@ namespace MarketOn.Controllers
                 Session.Add("Logeado", usuario.UserId);          
            }
 
-            return Json(validation);
+            return Json(new { validation, url = Url.Action("Index", "Home") });
         }
 
         public ActionResult UserValidator(string username)
@@ -76,7 +76,7 @@ namespace MarketOn.Controllers
 
             db.SaveChanges();          
 
-            return PartialView("~/Views/Login/Login.cshtml");
+            return PartialView("Login");
         }
         [HttpGet]
         public PartialViewResult Registro()

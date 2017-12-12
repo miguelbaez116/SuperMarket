@@ -67,11 +67,6 @@
 
 </style>
 
-
-<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/alertify.min.js"></script>
-<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/css/alertify.min.css" />
-<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/css/alertify.rtl.min.css" />
-
 <div class="row">
     <div>
         <a href="#" id="btnCrear" class="btn btn-danger col-md-12">Crear Lista</a>
@@ -103,7 +98,7 @@
                                     <tr>
                                         <td>@lista.SupermercadoNombre</td>
                                         <td>@lista.Fecha</td>
-                                        <td><a href="#" id="@lista.ListaCompraId" class="btnDetalle">Detalle Lista</a></td>
+                                        <td><a href="" id="@lista.ListaCompraId" class="btnDetalle">Detalle Lista</a></td>
                                     </tr>
                                 }
                             }
@@ -126,7 +121,7 @@
                                     <tr>
                                         <td>@lista.SupermercadoNombre</td>
                                         <td>@lista.Fecha</td>
-                                        <td><a href="#" id="@lista.ListaCompraId" class="btnDetalle">Detalle Lista</a></td>
+                                        <td><a href="" id="@lista.ListaCompraId" class="btnDetalle">Detalle Lista</a></td>
                                     </tr>
                                 }
                             }
@@ -184,31 +179,38 @@
 @section scripts{
     <script type="text/javascript">
         alertify.set('notifier', 'position', 'bottom-left');
+        var baseUrl = $("base").attr("href");
 
         $(document).ready(function () {
-            $(".btnDetalle").click(function () {
-                var ruta = "/Complemento/DetalleLista/" + this.id;
+            $(".btnDetalle").click(function (e) {
+                e.preventDefault();
 
-                $("#ContenedorModal").load(ruta, function () {
-                      $("#myModal").modal("show")
-                    });
-                });
+                var ruta = baseUrl + "Complemento/DetalleLista/" + this.id;
+
+                $.get(ruta,null, function(response)
+                {
+                    $("#ContenedorModal").html(response)
+                    $("#myModal").modal("show")
+                })
             });
+        });
         
         $(document).ready(function () {
-            $("#btnCrear").click(function () {
+            $("#btnCrear").click(function (e) {
+                e.preventDefault();
                 $("#createModal").modal("show")
             });
         });
 
         $(document).ready(function () {
-            $("#crearLista").click(function () {
+            $("#crearLista").click(function (e) {
+                e.preventDefault();
 
                 var nombreLista = $("#nombreLista").val();
                 var tipoLista = $("#tipoLista").val();
 
                 $.ajax({
-                    url: "/Complemento/CrearLista",
+                    url: baseUrl + "Complemento/CrearLista",
                     type: "POST",
                     data: JSON.stringify({ 'nombreLista': nombreLista, 'tipoLista': tipoLista }),
                     dataType: "json",
