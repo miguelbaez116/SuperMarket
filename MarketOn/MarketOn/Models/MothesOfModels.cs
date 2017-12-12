@@ -12,6 +12,7 @@ namespace MarketOn.Models
         public Producto Producto { get; set; }
         public Categoria Categoria { get; set; }
         public FamiliaCode FamiliaCode { get; set; }
+        public ListaCompra ListaCompra { get; set; }
 
         //Listas
         public IEnumerable<Producto> ListaProducto { get; set; }

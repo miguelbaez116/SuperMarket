@@ -67,12 +67,22 @@
 
 </style>
 
+
+<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/alertify.min.js"></script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/css/alertify.min.css" />
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/css/alertify.rtl.min.css" />
+
+<div class="row">
+    <div>
+        <a href="#" id="btnCrear" class="btn btn-danger col-md-12">Crear Lista</a>
+    </div>
+</div>
 <div class="row">
     <div class="panel with-nav-tabs panel-danger">
         <div class="panel-heading">
             <ul class="nav nav-tabs">
                 <li class="active text-center" style="width:50%;"><a href="#listaPersonal" data-toggle="tab">Lista Personal</a></li>
-                <li class="text-center" style="width:50%;"><a href="#listaFamiliar" data-toggle="tab">Lista Familiar</a></li>                
+                <li class="text-center" style="width:50%;"><a href="#listaFamiliar" data-toggle="tab">Lista Familiar</a></li>
             </ul>
         </div>
         <div class="panel-body">
@@ -93,7 +103,7 @@
                                     <tr>
                                         <td>@lista.SupermercadoNombre</td>
                                         <td>@lista.Fecha</td>
-                                        <td>@Html.ActionLink("Detalle Listas", "DetalleLista", "Complemento",null, new { id=@lista.ListaCompraId})</td>
+                                        <td><a href="#" id="@lista.ListaCompraId" class="btnDetalle">Detalle Lista</a></td>
                                     </tr>
                                 }
                             }
@@ -116,7 +126,7 @@
                                     <tr>
                                         <td>@lista.SupermercadoNombre</td>
                                         <td>@lista.Fecha</td>
-                                        <td>@Html.ActionLink("Detalle Listas", "DetalleLista", "Complemento", null,new { id = @lista.ListaCompraId })</td>
+                                        <td><a href="#" id="@lista.ListaCompraId" class="btnDetalle">Detalle Lista</a></td>
                                     </tr>
                                 }
                             }
@@ -128,3 +138,94 @@
     </div>
 </div>
 
+<!-- The Modal -->
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Detalle</h4>
+                <button type="button" style="position: absolute;top: 20px;left: 90%;" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" id="ContenedorModal" style="display:flex"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="createModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center">Crear Lista</h4>
+                <button type="button" style="position: absolute;top: 20px;left: 90%;" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" id="ContenedorModal-Crear" style="display:flex;">
+                <form class="Contenedor-Crear" style="display:inline-block; width:100%" id="Contenedor-Registro" data-toggle="validator">
+                    <div class="form-group text-center">
+                        <h4>Nombre de Lista</h4>
+                        <input type="text" name="nombreLista" class="form-control text-center" id="nombreLista" style="display: initial; max-width: 1000px; width:100%" />
+                    </div>
+                    <div class="form-group text-center">
+                        <h4>Tipo de Lista</h4>
+                        <select class="form-control text-center" id="tipoLista" style="display: initial; max-width: 1000px; width:100%">
+                            <option>Seleccione...</option>
+                            <option>Personal</option>
+                            <option>Familiar</option>
+                        </select>
+                    </div>
+                    <div class="btn-group col-md-12">
+                        <input type="button" name="Crear" value="Crear Lista" class="btn btn-danger" id="crearLista" style="display: initial; max-width: 1000px; width:100%" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        alertify.set('notifier', 'position', 'bottom-left');
+
+        $(document).ready(function () {
+            $(".btnDetalle").click(function () {
+                var ruta = "/Complemento/DetalleLista/" + this.id;
+
+                $("#ContenedorModal").load(ruta, function () {
+                      $("#myModal").modal("show")
+                    });
+                });
+            });
+        
+        $(document).ready(function () {
+            $("#btnCrear").click(function () {
+                $("#createModal").modal("show")
+            });
+        });
+
+        $(document).ready(function () {
+            $("#crearLista").click(function () {
+
+                var nombreLista = $("#nombreLista").val();
+                var tipoLista = $("#tipoLista").val();
+
+                $.ajax({
+                    url: "/Complemento/CrearLista",
+                    type: "POST",
+                    data: JSON.stringify({ 'nombreLista': nombreLista, 'tipoLista': tipoLista }),
+                    dataType: "json",
+                    traditional: true,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        if (data == true) {
+                            alertify.success('Lista Creada Correctamente');
+                            location.reload(true);
+                        }
+                    },
+                    error: function () {
+                        alertify.error("Error al Crear Lista!!");
+                    }
+                });
+            });
+        });
+
+    </script>
+}
