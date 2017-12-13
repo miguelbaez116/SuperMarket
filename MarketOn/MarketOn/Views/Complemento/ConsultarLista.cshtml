@@ -3,7 +3,11 @@
     ViewBag.Title = "ConsultarLista";
 }
 <style>
-
+    .InputFull {
+        /*display: initial;*/
+        max-width: 1200px;
+        width: 100%;
+    }
     .panel.with-nav-tabs .panel-heading {
         padding: 5px 5px 0 5px;
     }
@@ -69,7 +73,7 @@
 
 <div class="row">
     <div>
-        <a href="#" id="btnCrear" class="btn btn-danger col-md-12">Crear Lista</a>
+        <a href="#" id="btnCrear" class="btn btn-danger InputFull">Crear Lista</a>
     </div>
 </div>
 <div class="row">
@@ -98,7 +102,7 @@
                                     <tr>
                                         <td>@lista.SupermercadoNombre</td>
                                         <td>@lista.Fecha</td>
-                                        <td><a href="" id="@lista.ListaCompraId" class="btnDetalle">Detalle Lista</a></td>
+                                        <td><a href="" id="@lista.ListaCompraId" class="btnDetalle glyphicon glyphicon-list-alt"></a></td>
                                     </tr>
                                 }
                             }
@@ -138,7 +142,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" style="position: absolute;top: 20px;left: 90%;" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" style="position: absolute;top: 5%;left: 90%;" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body" id="ContenedorModal" style="display:flex"></div>
         </div>
@@ -150,7 +154,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title text-center">Crear Lista</h4>
-                <button type="button" style="position: absolute;top: 20px;left: 90%;" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" style="position: absolute;top: 5%;left: 90%;" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body" id="ContenedorModal-Crear" style="display:flex;">
                 <form class="Contenedor-Crear" style="display:inline-block; width:100%" id="Contenedor-Registro" data-toggle="validator">

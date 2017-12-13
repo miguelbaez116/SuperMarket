@@ -31,15 +31,18 @@
                 <tr> 
                     <th style="text-align:center">Nombre</th>
                     <th style="text-align:center">Cantidad</th>
+
                 </tr>
             </thead>
             <tbody>
                 @{
-                    foreach (var listaProductos in Model.ListaProducto)
+                    foreach (var listaProductos in Model.ListaProductosInventarios)
                     {
                         <tr>
                             <td>@listaProductos.ProductoNombre</td>
-                            <td>@listaProductos.Stock</td>
+                            <td>@listaProductos.Cantidad</td>
+                            <td><a href="" id="@listaProductos.InventarioId" class="btnModif glyphicon glyphicon-pencil "></a>
+                                <a href="" id="@listaProductos.InventarioId" class="btnElim glyphicon glyphicon-remove"></a></td>
                         </tr>
                     }
                 }
@@ -52,8 +55,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title text-center"></h4>
-                <button type="button" style="position: absolute;top: 20px;left: 90%;" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" style="position: absolute;top: 10%;left: 90%;" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body" id="ContenedorModal-CrearProducto" style="display:flex;">
                 <form class="Contenedor-Crear" style="display:inline-block; width:100%" id="Contenedor-Registro" data-toggle="validator">
@@ -78,17 +80,40 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title text-center"></h4>
-                <button type="button" style="position: absolute;top: 20px;left: 90%;" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title text-center">Lista Producto</h4>
+                <button type="button" style="position: absolute;top: 10%;left: 90%;" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body" id="ContenedorModal-AnadirProducto" style="display:flex;">
                 <form class="Contenedor-Crear" style="display:inline-block; width:100%" id="Contenedor-Registro" data-toggle="validator">
                     <div class="form-group text-center">
-                        <h4>Lista Producto</h4>
                         @Html.DropDownListFor(m => m.Producto.ProductoId, new SelectList(@Model.ListaProductos, "ProductoId", "ProductoNombre"), "Seleccione...", new { @class = "form-control text-center InputFull" })
+                    </div>
+                    <div class="form-group text-center">
+                        <input type="number" name="cantidad" class="form-control text-center InputFull" placeholder="Cantidad" id="Producto_Cantidad" />
                     </div>
                     <div class="btn-group col-md-12">
                         <input type="button" name="anadirProducto" value="Agregar Producto" class="btn btn-danger InputFull" id="anadirProducto" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalModificarProducto">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center">Cantidad del Producto</h4>
+                <button type="button" style="position: absolute;top:10%; left: 90%;" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" id="ContenedorModal-CrearProducto" style="display:flex;">
+                <form class="Contenedor-Modificar" style="display:inline-block; width:100%" id="Contenedor-Modificar" data-toggle="validator">
+                    <div class="form-group text-center">
+                        <input type="number" name="cantidad" class="form-control text-center InputFull" placeholder="Cantidad" id="cantidadModificar" />
+                    </div>
+                    <div class="btn-group col-md-12">
+                        <input type="button" name="ModificarProducto" value="Modificar Producto" class="btn btn-danger InputFull" id="modificarProducto" />
                     </div>
                 </form>
             </div>
@@ -101,21 +126,15 @@
     <script type="text/javascript">
         alertify.set('notifier', 'position', 'bottom-left');
         var baseUrl = $("base").attr("href");
+        var inventarioIdModificar = "";
 
+        //CrearProducto
         $(document).ready(function () {
             $("#btnCrearProducto").click(function (e) {
                 e.preventDefault();
                 $("#modalCrearProducto").modal("show")
             });
         });
-
-        $(document).ready(function () {
-            $("#btnAnadirProducto").click(function (e) {
-                e.preventDefault();
-                $("#modalAnadirProducto").modal("show")
-            });
-        });
-
         $(document).ready(function () {
             $("#crearProducto").click(function (e) {
                 e.preventDefault();
@@ -143,16 +162,24 @@
             });
         });
 
+        //AgregarProducto
+        $(document).ready(function () {
+            $("#btnAnadirProducto").click(function (e) {
+                e.preventDefault();
+                $("#modalAnadirProducto").modal("show")
+            });
+        });
         $(document).ready(function () {
             $("#anadirProducto").click(function (e) {
                 e.preventDefault();
 
                 var productoId = $("#Producto_ProductoId").val();
+                var Cantidad = $("#Producto_Cantidad").val();
 
                 $.ajax({
                     url: baseUrl + "Home/AgregarProducto",
                     type: "POST",
-                    data: JSON.stringify({ 'productoId': productoId }),
+                    data: JSON.stringify({ 'productoId': productoId, 'Cantidad': Cantidad }),
                     dataType: "json",
                     traditional: true,
                     contentType: "application/json; charset=utf-8",
@@ -164,6 +191,68 @@
                     },
                     error: function () {
                         alertify.error("Error Agregando Producto!");
+                    }
+                });
+            });
+        });
+
+        //ModificarProducto
+        $(document).ready(function () {
+            $(".btnModif").click(function (e) {
+                e.preventDefault();
+                inventarioIdModificar = this.id;
+                $("#modalModificarProducto").modal("show")
+            });
+        });
+        $(document).ready(function () {
+            $("#modificarProducto").click(function (e) {
+                e.preventDefault();
+
+                var inventarioId = inventarioIdModificar;
+                var Cantidad = $("#cantidadModificar").val();
+
+                $.ajax({
+                    url: baseUrl + "Home/ModificarProducto",
+                    type: "POST",
+                    data: JSON.stringify({ 'inventarioId': inventarioId, 'Cantidad': Cantidad }),
+                    dataType: "json",
+                    traditional: true,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        if (data.validacion == true) {
+                            alertify.success('Producto Modificado Correctamente!');
+                            window.location.href = data.url;
+                        }
+                    },
+                    error: function () {
+                        alertify.error("Error Modificando Producto!");
+                    }
+                });
+            });
+        });
+
+        //EliminarProducto
+        $(document).ready(function () {
+            $(".btnElim").click(function (e) {
+                e.preventDefault();
+
+                var inventarioId = this.id;
+
+                $.ajax({
+                    url: baseUrl + "Home/EliminarProducto",
+                    type: "POST",
+                    data: JSON.stringify({ 'inventarioId': inventarioId}),
+                    dataType: "json",
+                    traditional: true,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        if (data.validacion == true) {
+                            alertify.success('Producto Eliminado Correctamente!');
+                            window.location.href = data.url;
+                        }
+                    },
+                    error: function () {
+                        alertify.error("Error Eliminando Producto!");
                     }
                 });
             });
