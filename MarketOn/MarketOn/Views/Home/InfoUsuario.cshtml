@@ -1,0 +1,234 @@
+﻿@model MarketOn.Models.MothesOfModels
+
+@{
+    ViewBag.Title = "InfoUsuario";
+}
+
+
+<style>
+    .InputFull {
+        display: initial;
+        max-width: 1000px;
+        width: 100%;
+    }
+</style>
+
+<div class="row">
+    <h1 class="text-center">Informacion Usuario</h1>
+</div>
+<form class="Contenedor-Usuario" style="display:inline-block; width:100%" id="Contenedor-Usuario" data-toggle="validator">
+    <div class="form-group text-center">
+        <h4>Username</h4>
+        @Html.TextBoxFor(m => (m.Usuario.Username), new { @class = "form-control text-center InputFull", @readonly = "readonly" })
+    </div>
+    <div class="form-group text-center">
+        <h4>Nombres del Usuario</h4>
+        @Html.TextBoxFor(m => (m.Usuario.Nombre), new { @class = "form-control text-center InputFull" })
+    </div>
+    <div class="form-group text-center">
+        <h4>Apellidos del Usuario</h4>
+        @Html.TextBoxFor(m => (m.Usuario.Apellido), new { @class = "form-control text-center InputFull" })
+    </div>
+    <div class="form-group text-center">
+        <h4>Codigo Familiar</h4>
+        @Html.TextBoxFor(m => (m.Usuario.FamiliaId), new { @class = "form-control text-center InputFull", type = "number" })
+    </div>
+    <div class="col-md-6">
+        <input type="button" name="CrearCodigoFamiliar" id="btnCrearFramiliar" value="Crear Codigo Familiar" class="btn btn-danger InputFull" />
+    </div>
+    <div class="col-md-6">
+        <input type="button" name="CambiarContrasena" id="btnCambiarPassword" value="Cambiar Contraseña" class="btn btn-danger InputFull" />
+    </div>
+    <div class="col-md-12">
+        <input type="button" name="ActualizarInformacion" id="btnActualizarInformacion" value="Actualizar Informacion" class="btn btn-danger" style="width: 100%; max-width: 1200px;" />
+    </div>
+</form>
+
+<div class="modal fade" id="modalCrearCodigoFamiliar">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" style="position: absolute;top: 10%;left: 90%;" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" id="ContenedorModal-CrearCodigoFamiliar" style="display:flex;">
+                <form class="Contenedor-CrearCodigoFamiliar" style="display:inline-block; width:100%" id="Contenedor-CodigoFamiliar" data-toggle="validator">
+                    <div class="form-group text-center">
+                        <h4>Nombre de Familia</h4>
+                        <input type="text" name="nombreFamilia" class="form-control text-center" id="nombreFamilia" style="display: initial; max-width: 1200px; width:100%" />
+                    </div>
+                    <div class="form-group">
+                        <input type="button" name="CrearCodigoFamilia" value="Crear Codigo Familia" class="btn btn-danger" id="crearFamilia" style="display: initial; max-width: 1200px; width:100%" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalModifcarPassoword">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Modificar Contraseña</h4>
+                <button type="button" style="position: absolute;top: 10%;left: 90%;" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" id="ContenedorModal-ModifcarPassoword" style="display:flex;">
+                <form class="Contenedor-ModifcarPassoword" style="display:inline-block; width:100%" id="Contenedor-ModifcarPassoword" data-toggle="validator">
+                    <div class="form-group text-center">
+                        <h4>Contraseña Actual</h4>
+                        <input type="text" name="PasswordActual" class="form-control text-center" id="passwordActual" style="display: initial; max-width: 1200px; width:100%" />
+                    </div>
+                    <div class="form-group text-center">
+                        <h4>Nueva Contraseña</h4>
+                        <input type="text" name="PasswordNueva" class="form-control text-center" id="passwordNueva" style="display: initial; max-width: 1200px; width:100%" />
+                    </div>
+                    <div class="form-group text-center">
+                        <h4>Confirmar Contraseña</h4>
+                        <input type="text" name="PasswordConfirmar" class="form-control text-center" id="passwordConfirmar" style="display: initial; max-width: 1200px; width:100%" />
+                    </div>
+                    <div class="form-group">
+                        <input type="button" name="ModificarContraseña" value="Modificar Contraseña" class="btn btn-danger" id="modificarPassword" style="display: initial; max-width: 1200px; width:100%" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script type="text/javascript">
+        alertify.set('notifier', 'position', 'bottom-left');
+        var baseUrl = $("base").attr("href");
+        var inventarioIdModificar = "";
+
+        //CrearFamilia
+        $(document).ready(function () {
+            $("#btnCrearFramiliar").click(function (e) {
+                e.preventDefault();
+                $("#modalCrearCodigoFamiliar").modal("show")
+            });
+        });
+        $(document).ready(function () {
+            $("#crearFamilia").click(function (e) {
+                e.preventDefault();
+
+                var nombreFamilia = $("#nombreFamilia").val();
+
+                $.ajax({
+                    url: baseUrl + "Home/CrearFamilia",
+                    type: "POST",
+                    data: JSON.stringify({ 'nombreFamilia': nombreFamilia }),
+                    dataType: "json",
+                    traditional: true,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        if (data.validacion == true) {
+                            alertify.success('Codigo Familiar #' + data.codigo + ' Creado Correctamente!');
+                            window.location.href = data.url;
+                        }
+                    },
+                    error: function () {
+                        alertify.error("Error Creando Codigo Familiar!");
+                    }
+                });
+            });
+        });
+
+        //MidifcarPassword
+        $(document).ready(function () {
+            $("#btnCambiarPassword").click(function (e) {
+                e.preventDefault();
+                $("#modalModifcarPassoword").modal("show")
+            });
+        });
+        $(document).ready(function () {
+            $("#modificarPassword").click(function (e) {
+                e.preventDefault();
+
+                var PassActual = $("#passwordActual").val();
+                var PassNuevo = $("#passwordNueva").val();
+                var PassConfirmar = $("#passwordConfirmar").val();
+
+                $.ajax({
+                    url: baseUrl + "Home/ValidarPassword",
+                    type: "POST",
+                    data: JSON.stringify({ 'PassActual': PassActual }),
+                    dataType: "json",
+                    traditional: true,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        if (data.validacion == true) {
+                            if (PassNuevo == PassConfirmar) {
+                                $.ajax({
+                                    url: baseUrl + "Home/ModificarPassword",
+                                    type: "POST",
+                                    data: JSON.stringify({ 'PassNuevo': PassNuevo }),
+                                    dataType: "json",
+                                    traditional: true,
+                                    contentType: "application/json; charset=utf-8",
+                                    success: function (data) {
+                                        if (data.validacion == true) {
+                                            alertify.success('Contraseña Modificada Correctamente!');
+                                            window.location.href = data.url;
+                                        }
+                                    },
+                                    error: function () {
+                                        alertify.error("Error Modificando Contraseña!");
+                                    }
+                                });
+                            } else { alertify.error("Favor Confirmar Contraseñas!"); }
+                        } else {
+                            alertify.error("Contraseña Incorrecta!");
+                        }
+                    },
+                    error: function () {
+                        alertify.error("Error en el BackEnd!");
+                    }
+                });
+
+
+
+
+
+
+
+                
+            });
+        });
+
+        //ModificarUsuario
+        $(document).ready(function () {
+            $("#btnActualizarInformacion").click(function (e) {
+                e.preventDefault();
+
+                var familiaId = $("#Usuario_FamiliaId").val();
+                var nombre = $("#Usuario_Nombre").val();
+                var apellido = $("#Usuario_Apellido").val();
+
+                $.ajax({
+                    url: baseUrl + "Home/ModificarUsuario",
+                    type: "POST",
+                    data: JSON.stringify({ 'nombre': nombre, 'apellido': apellido, 'familiaId': familiaId }),
+                    dataType: "json",
+                    traditional: true,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        if (data.validacion == true) {
+                            alertify.success('Usuario Modificado Correctamente!');
+                            window.location.href = data.url;
+                        } else {
+                            alertify.error("Codigo Familiar no Encontrado!");
+                        }
+                    },
+                    error: function () {
+                        alertify.error("Error Modificando Producto!");
+                    }
+                });
+            });
+        });
+
+
+
+    </script>
+}

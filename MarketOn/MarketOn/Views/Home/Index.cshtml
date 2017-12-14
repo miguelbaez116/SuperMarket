@@ -31,7 +31,7 @@
                 <tr> 
                     <th style="text-align:center">Nombre</th>
                     <th style="text-align:center">Cantidad</th>
-
+                    <th style="text-align:center">Eliminar</th>
                 </tr>
             </thead>
             <tbody>
@@ -40,9 +40,8 @@
                     {
                         <tr>
                             <td>@listaProductos.ProductoNombre</td>
-                            <td>@listaProductos.Cantidad</td>
-                            <td><a href="" id="@listaProductos.InventarioId" class="btnModif glyphicon glyphicon-pencil "></a>
-                                <a href="" id="@listaProductos.InventarioId" class="btnElim glyphicon glyphicon-remove"></a></td>
+                            <td><a href="" id="@listaProductos.InventarioId" class="btnModif">@listaProductos.Cantidad</a></td>
+                            <td><a href="" id="@listaProductos.InventarioId" class="btnElim glyphicon glyphicon-remove"></a></td>
                         </tr>
                     }
                 }

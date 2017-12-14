@@ -22,16 +22,18 @@ namespace MarketOn.Controllers
             var MOM = new MothesOfModels
             {
                 ListaProductosInventarios = (from I in db.Inventario
-                                 join P in db.Producto on I.ProductoId equals P.ProductoId
-                                 where (I.UserId == usuario.UserId) || (I.FamiliaId == usuario.FamiliaId)
-                                 select new ListaProducto() { ProductoNombre = P.ProductoNombre,
-                                                              Cantidad = I.Cantidad,
-                                                              InventarioId = I.InventarioId}).ToList(),
-
+                                             join P in db.Producto on I.ProductoId equals P.ProductoId
+                                             where (I.UserId == usuario.UserId) || ((I.FamiliaId == usuario.FamiliaId) && (usuario.FamiliaId != null))
+                                             select new ListaProducto()
+                                             {
+                                                 ProductoNombre = P.ProductoNombre,
+                                                 Cantidad = I.Cantidad,
+                                                 InventarioId = I.InventarioId
+                                             }).ToList(),
                 Usuario = usuario,
                 ListaCategorias = db.Categoria.ToList(),
                 ListaProductos = db.Producto.ToList()
-    
+
             };
             return View(MOM);
         }
@@ -106,6 +108,110 @@ namespace MarketOn.Controllers
             db.SaveChanges();
 
             return Json(new { validacion, url = Url.Action("Index", "Home") });
+        }
+
+        [MiguelAuthorize]
+        [HttpGet]
+        public ActionResult InfoUsuario()
+        {
+            var usuario = HttpContext.GetUsuario();
+
+            var db = new DataMarketOn.MarketOnEntities();
+
+            var MOM = new MothesOfModels
+            {
+                Usuario = usuario
+            };
+            return View(MOM);
+        }
+
+        public ActionResult ModificarUsuario(string nombre, string apellido, string familiaId)
+        {
+            var db = new DataMarketOn.MarketOnEntities();
+            var usuario = HttpContext.GetUsuario();
+            var validacion = false;
+
+            var idFamiliar = 0;
+            if (familiaId != "") { idFamiliar = Int32.Parse(familiaId); }
+
+            if (idFamiliar != 0)
+            { 
+                var familiaCode = db.FamiliaCode.Find(idFamiliar);
+
+                if (familiaCode == null) { validacion = false; }
+                else
+                {
+                    var usuarioModifcar = db.Usuario.Find(usuario.UserId);
+                    usuarioModifcar.Nombre = nombre;
+                    usuarioModifcar.Apellido = apellido;
+                    usuarioModifcar.FamiliaId = idFamiliar;
+
+                    db.Entry(usuarioModifcar).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+            
+                    validacion = true;
+                }
+            }
+
+            if (familiaId == "") { validacion = true; }
+
+            
+
+            return Json(new { validacion, url = Url.Action("Index", "Home") });
+        }
+
+        public ActionResult CrearFamilia(string nombreFamilia)
+        {
+            var db = new DataMarketOn.MarketOnEntities();
+            var validacion = true;
+
+            var FamiliaCode = new FamiliaCode();
+
+            FamiliaCode.FamiliaNombre = nombreFamilia;
+            FamiliaCode.FamiliaCodigo = nombreFamilia;
+
+            db.FamiliaCode.Add(FamiliaCode);
+            db.SaveChanges();
+
+            var codigoFamiliar = (from c in db.FamiliaCode 
+                                  orderby c.FamiliaId descending
+                                  select c).FirstOrDefault();
+
+            return Json(new { validacion, url = Url.Action("InfoUsuario", "Home"), codigo = codigoFamiliar.FamiliaId });
+        }
+
+        public ActionResult ValidarPassword(string PassActual)
+        {
+            var db = new DataMarketOn.MarketOnEntities();
+            var validacion = false;
+
+            var usuario = HttpContext.GetUsuario();
+
+            if (usuario.Password == PassActual)
+            {
+             validacion = true;
+            }
+
+            return Json(new { validacion });
+        }
+        public ActionResult CrearFamilia(string nombreFamilia)
+        {
+            var db = new DataMarketOn.MarketOnEntities();
+            var validacion = true;
+
+            var FamiliaCode = new FamiliaCode();
+
+            FamiliaCode.FamiliaNombre = nombreFamilia;
+            FamiliaCode.FamiliaCodigo = nombreFamilia;
+
+            db.FamiliaCode.Add(FamiliaCode);
+            db.SaveChanges();
+
+            var codigoFamiliar = (from c in db.FamiliaCode
+                                  orderby c.FamiliaId descending
+                                  select c).FirstOrDefault();
+
+            return Json(new { validacion, url = Url.Action("InfoUsuario", "Home"), codigo = codigoFamiliar.FamiliaId });
         }
 
     }
