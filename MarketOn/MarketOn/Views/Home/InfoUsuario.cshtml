@@ -124,12 +124,12 @@
                     contentType: "application/json; charset=utf-8",
                     success: function (data) {
                         if (data.validacion == true) {
-                            alertify.success('Codigo Familiar #' + data.codigo + ' Creado Correctamente!');
+                            alertify.success('Codigo familiar #' + data.codigo + ' creado correctamente!');
                             window.location.href = data.url;
                         }
                     },
                     error: function () {
-                        alertify.error("Error Creando Codigo Familiar!");
+                        alertify.error("Error creando codigo familiar!");
                     }
                 });
             });
@@ -161,7 +161,7 @@
                         if (data.validacion == true) {
                             if (PassNuevo == PassConfirmar) {
                                 $.ajax({
-                                    url: baseUrl + "Home/ModificarPassword",
+                                    url: baseUrl + "Home/ModififcarPassword",
                                     type: "POST",
                                     data: JSON.stringify({ 'PassNuevo': PassNuevo }),
                                     dataType: "json",
@@ -169,17 +169,19 @@
                                     contentType: "application/json; charset=utf-8",
                                     success: function (data) {
                                         if (data.validacion == true) {
-                                            alertify.success('Contraseña Modificada Correctamente!');
+                                            alertify.success('Contraseña modificada correctamente!');
                                             window.location.href = data.url;
+                                        } else {
+                                            alertify.error("Favor ingresar contraseña valida!");
                                         }
                                     },
                                     error: function () {
-                                        alertify.error("Error Modificando Contraseña!");
+                                        alertify.error("Error modificando contraseña!");
                                     }
                                 });
-                            } else { alertify.error("Favor Confirmar Contraseñas!"); }
+                            } else { alertify.error("Favor confirmar contraseñas!"); }
                         } else {
-                            alertify.error("Contraseña Incorrecta!");
+                            alertify.error("Contraseña incorrecta!");
                         }
                     },
                     error: function () {
@@ -215,20 +217,18 @@
                     contentType: "application/json; charset=utf-8",
                     success: function (data) {
                         if (data.validacion == true) {
-                            alertify.success('Usuario Modificado Correctamente!');
+                            alertify.success('Usuario modificado correctamente!');
                             window.location.href = data.url;
                         } else {
-                            alertify.error("Codigo Familiar no Encontrado!");
+                            alertify.error("Codigo familiar no encontrado!");
                         }
                     },
                     error: function () {
-                        alertify.error("Error Modificando Producto!");
+                        alertify.error("Error modificando producto!");
                     }
                 });
             });
         });
-
-
 
     </script>
 }

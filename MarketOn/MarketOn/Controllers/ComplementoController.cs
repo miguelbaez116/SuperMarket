@@ -47,8 +47,6 @@ namespace MarketOn.Controllers
             };
             return View(MOM);
         }
-
-
         public ActionResult CrearLista(string nombreLista, string tipoLista )
         {
             var db = new DataMarketOn.MarketOnEntities();

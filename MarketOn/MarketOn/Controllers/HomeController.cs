@@ -124,7 +124,6 @@ namespace MarketOn.Controllers
             };
             return View(MOM);
         }
-
         public ActionResult ModificarUsuario(string nombre, string apellido, string familiaId)
         {
             var db = new DataMarketOn.MarketOnEntities();
@@ -152,14 +151,9 @@ namespace MarketOn.Controllers
                     validacion = true;
                 }
             }
-
             if (familiaId == "") { validacion = true; }
-
-            
-
             return Json(new { validacion, url = Url.Action("Index", "Home") });
         }
-
         public ActionResult CrearFamilia(string nombreFamilia)
         {
             var db = new DataMarketOn.MarketOnEntities();
@@ -179,7 +173,6 @@ namespace MarketOn.Controllers
 
             return Json(new { validacion, url = Url.Action("InfoUsuario", "Home"), codigo = codigoFamiliar.FamiliaId });
         }
-
         public ActionResult ValidarPassword(string PassActual)
         {
             var db = new DataMarketOn.MarketOnEntities();
@@ -194,24 +187,23 @@ namespace MarketOn.Controllers
 
             return Json(new { validacion });
         }
-        public ActionResult CrearFamilia(string nombreFamilia)
+        public ActionResult ModififcarPassword(string PassNuevo)
         {
             var db = new DataMarketOn.MarketOnEntities();
-            var validacion = true;
+            var usuario = HttpContext.GetUsuario();
+            var validacion = false;
 
-            var FamiliaCode = new FamiliaCode();
+            if (PassNuevo == "")
+            {
+                var usuarioModifcar = db.Usuario.Find(usuario.UserId);
+                usuarioModifcar.Password = PassNuevo;
 
-            FamiliaCode.FamiliaNombre = nombreFamilia;
-            FamiliaCode.FamiliaCodigo = nombreFamilia;
+                db.Entry(usuarioModifcar).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                validacion = true;
+            }
 
-            db.FamiliaCode.Add(FamiliaCode);
-            db.SaveChanges();
-
-            var codigoFamiliar = (from c in db.FamiliaCode
-                                  orderby c.FamiliaId descending
-                                  select c).FirstOrDefault();
-
-            return Json(new { validacion, url = Url.Action("InfoUsuario", "Home"), codigo = codigoFamiliar.FamiliaId });
+            return Json(new { validacion, url = Url.Action("InfoUsuario", "Home") });
         }
 
     }
