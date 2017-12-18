@@ -72,5 +72,46 @@ namespace MarketOn.Controllers
 
             return Json(validation);
         }
+
+
+
+        [MiguelAuthorize]
+        [HttpGet]
+        public ActionResult ListaInfo(int id)
+        {
+            var db = new DataMarketOn.MarketOnEntities();
+            var usuario = HttpContext.GetUsuario();
+
+            var MOM = new MothesOfModels
+            {
+                ListaProductos = db.Producto.ToList(),
+                ListaCompra = db.ListaCompra.Where(l => l.ListaCompraId == id).FirstOrDefault(),
+                Usuario = usuario
+            };
+            return View(MOM);
+        }
+
+        public ActionResult AgregarProducto(string productoId, string Cantidad)
+        {
+            var db = new DataMarketOn.MarketOnEntities();
+            var inventario = new Inventario();
+
+            var idProducto = Int32.Parse(productoId);
+            var cantidad = Decimal.Parse(Cantidad);
+            var validacion = true;
+            var usuario = HttpContext.GetUsuario();
+
+            inventario.ProductoId = idProducto;
+            inventario.FamiliaId = usuario.FamiliaId;
+            inventario.UserId = usuario.UserId;
+            inventario.Cantidad = cantidad;
+
+            db.Inventario.Add(inventario);
+            db.SaveChanges();
+
+            return Json(new { validacion, url = Url.Action("Index", "Home") });
+        }
+
+
     }
 }
