@@ -193,7 +193,7 @@ namespace MarketOn.Controllers
             var usuario = HttpContext.GetUsuario();
             var validacion = false;
 
-            if (PassNuevo == "")
+            if (PassNuevo != "")
             {
                 var usuarioModifcar = db.Usuario.Find(usuario.UserId);
                 usuarioModifcar.Password = PassNuevo;
