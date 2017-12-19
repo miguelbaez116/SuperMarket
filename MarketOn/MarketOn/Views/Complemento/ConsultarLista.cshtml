@@ -291,10 +291,10 @@
         }
      
         function Clonar() {
-            $("#Producto_Cantidad").first().val("");
+            
             var div = $("#ContenedorListaProductos").first().clone();
             $('#divBtn').before(div);
-
+            var x = $(".prp input#Producto_Cantidad").last()["0"].value = "";
         }
 
     </script>
