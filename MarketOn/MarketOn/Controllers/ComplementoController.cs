@@ -91,25 +91,20 @@ namespace MarketOn.Controllers
             return View(MOM);
         }
 
-        public ActionResult AgregarProducto(string productoId, string Cantidad)
+        public ActionResult AgregarProductos(IEnumerable<DetalleListaCompra> listaProductos)
         {
             var db = new DataMarketOn.MarketOnEntities();
-            var inventario = new Inventario();
 
-            var idProducto = Int32.Parse(productoId);
-            var cantidad = Decimal.Parse(Cantidad);
-            var validacion = true;
-            var usuario = HttpContext.GetUsuario();
+            var validacion = false;
 
-            inventario.ProductoId = idProducto;
-            inventario.FamiliaId = usuario.FamiliaId;
-            inventario.UserId = usuario.UserId;
-            inventario.Cantidad = cantidad;
+            if (listaProductos != null)
+            {
+                db.DetalleListaCompra.AddRange(listaProductos);
+                db.SaveChanges();
+                validacion = true;
+            }
 
-            db.Inventario.Add(inventario);
-            db.SaveChanges();
-
-            return Json(new { validacion, url = Url.Action("Index", "Home") });
+            return Json(new { validacion });
         }
 
 

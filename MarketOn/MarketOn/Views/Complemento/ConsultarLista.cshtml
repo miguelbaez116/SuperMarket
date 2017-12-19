@@ -200,13 +200,13 @@
 
         alertify.set('notifier', 'position', 'bottom-left');
         var baseUrl = $("base").attr("href");
-        var idLista = 0;
+        var ListaCompraId = 0;
 
         $(document).ready(function () {
             $(".btnDetalle").click(function (e) {
                 e.preventDefault();
-                idLista = this.id;
-                var ruta = baseUrl + "Complemento/DetalleLista/" + idLista;
+                ListaCompraId = this.id;
+                var ruta = baseUrl + "Complemento/DetalleLista/" + ListaCompraId;
 
                 $.get(ruta,null, function(response)
                 {
@@ -219,8 +219,8 @@
         $(document).ready(function () {
             $(".btnNombreLista").click(function (e) {
                 e.preventDefault();
-
-                var ruta = baseUrl + "Complemento/ListaInfo/" + this.id;
+                ListaCompraId = this.id;
+                var ruta = baseUrl + "Complemento/ListaInfo/" + ListaCompraId;
 
                 $.get(ruta, null, function (response) {
                     $("#ContenedorListaInfo").html(response)
@@ -264,8 +264,6 @@
             });
         });
 
-
-
         function ListaInfo() {
             $("#agregarProductos").click(function (e) {
                 e.preventDefault();
@@ -279,19 +277,46 @@
 
                 $(".productos").each(function () {
 
-                    var productoId = $(this).find("#Producto_ProductoId").val();
-                    var cantidad = $(this).find("#Producto_Cantidad").val();
+                    var ProductoId = $(this).find("#Producto_ProductoId").val();
+                    var Cantidad = $(this).find("#Producto_Cantidad").val();
 
-                    var obj = {productoId : productoId, 
-                               cantidad : cantidad};
+                    if (ProductoId != "" && Cantidad != "") {
+                        var obj = {
+                            ProductoId: ProductoId,
+                            Cantidad: Cantidad,
+                            ListaCompraId: ListaCompraId,
+                            Precio: 0
+                        };
 
-                    listaProductos.push(obj)
-                })   
+                        listaProductos.push(obj)
+                    } 
+                }).promise().done(function() {
+
+                    $.ajax({
+                        url: baseUrl + "Complemento/AgregarProductos",
+                        type: "POST",
+                        data: JSON.stringify({ 'listaProductos': listaProductos }),
+                        dataType: "json",
+                        traditional: true,
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            if (data.validacion == true) {
+                                alertify.success('Productos agregados correctamente!');
+                                location.reload(true);
+                            }
+                        },
+                        error: function () {
+                            alertify.error("Error al crear lista!!");
+                        }
+                    });
+
+                })
+
+                
             });
         }
      
         function Clonar() {
-            
             var div = $("#ContenedorListaProductos").first().clone();
             $('#divBtn').before(div);
             var x = $(".prp input#Producto_Cantidad").last()["0"].value = "";
