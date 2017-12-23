@@ -22,7 +22,7 @@ namespace MarketOn.DataMarketOn
         public int ListaCompraId { get; set; }
         public Nullable<int> UserId { get; set; }
         public Nullable<int> FamiliaId { get; set; }
-        public string SupermercadoNombre { get; set; }
+        public string ListaCompraNombre { get; set; }
         public decimal MontoTotal { get; set; }
         public System.DateTime Fecha { get; set; }
     

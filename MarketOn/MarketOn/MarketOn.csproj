@@ -177,9 +177,6 @@
     <Compile Include="DataMarketOn\Categoria.cs">
       <DependentUpon>MarketOnDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataMarketOn\database_firewall_rules.cs">
-      <DependentUpon>MarketOnDB.tt</DependentUpon>
-    </Compile>
     <Compile Include="DataMarketOn\DetalleListaCompra.cs">
       <DependentUpon>MarketOnDB.tt</DependentUpon>
     </Compile>

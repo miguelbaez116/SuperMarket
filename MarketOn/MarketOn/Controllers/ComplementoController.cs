@@ -37,27 +37,34 @@ namespace MarketOn.Controllers
 
             var MOM = new MothesOfModels
             {
-                ListaProducto = (from P in db.Producto
-                                 join DC in db.DetalleListaCompra on P.ProductoId equals DC.ProductoId
-                                 join LC in db.ListaCompra on DC.ListaCompraId equals LC.ListaCompraId
-                                 where LC.ListaCompraId == id
-                                 select P).ToList(),
+                ListaProductoCompra = (from P in db.Producto
+                                       join DC in db.DetalleListaCompra on P.ProductoId equals DC.ProductoId
+                                       join LC in db.ListaCompra on DC.ListaCompraId equals LC.ListaCompraId
+                                       where LC.ListaCompraId == id
+                                       select new ListaProductoCompra()
+                                       {
+                                           ProductoNombre = P.ProductoNombre,
+                                           Cantidad = DC.Cantidad,
+                                           Estado = DC.Estado
+                                       }).ToList(),
                 ListaCompra = db.ListaCompra.Where(l => l.ListaCompraId == id).FirstOrDefault(),
                 Usuario = usuario
             };
             return View(MOM);
         }
-        public ActionResult CrearLista(string nombreLista, string tipoLista )
+        public ActionResult CrearLista(string nombreLista, string tipoLista)
         {
             var db = new DataMarketOn.MarketOnEntities();
 
             var validation = true;
             var usuario = HttpContext.GetUsuario();
 
-            var listaCompra = new ListaCompra();
+            var listaCompra = new ListaCompra
+            {
+                ListaCompraNombre = nombreLista,
+                Fecha = System.DateTime.Today
+            };
 
-            listaCompra.SupermercadoNombre = nombreLista;
-            listaCompra.Fecha = System.DateTime.Today;
             if (tipoLista == "Personal")
             {
                 listaCompra.UserId = usuario.UserId;

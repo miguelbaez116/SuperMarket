@@ -16,6 +16,7 @@ namespace MarketOn.Models
 
         //Listas
         public IEnumerable<ListaProducto> ListaProductosInventarios { get; set; }
+        public IEnumerable<ListaProductoCompra> ListaProductoCompra { get; set; }
         public IEnumerable<Producto> ListaProducto { get; set; }
         public IEnumerable<Producto> ListaProductos { get; set; }
         public IEnumerable<ListaCompra> ListaCompraPersonal { get; set; }
@@ -30,5 +31,12 @@ namespace MarketOn.Models
         public decimal Cantidad { get; set; }
         public int InventarioId { get; set; }
 
+    }
+
+    public class ListaProductoCompra
+    {
+        public string ProductoNombre { get; set; }
+        public decimal Cantidad { get; set; }
+        public string Estado { get; set; }
     }
 }

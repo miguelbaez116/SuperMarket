@@ -4,14 +4,13 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="MarketOnModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="MarketOnModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Categoria">
           <Key>
             <PropertyRef Name="CategoriaId" />
           </Key>
           <Property Name="CategoriaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CategoriaNombre" Type="nvarchar" MaxLength="200" Nullable="false" />
-          <Property Name="Descripcion" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="DetalleListaCompra">
           <Key>
@@ -22,6 +21,7 @@
           <Property Name="ListaCompraId" Type="int" />
           <Property Name="Precio" Type="decimal" Precision="10" Scale="2" Nullable="false" />
           <Property Name="Cantidad" Type="decimal" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="Estado" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="FamiliaCode">
           <Key>
@@ -40,6 +40,7 @@
           <Property Name="FamiliaId" Type="int" />
           <Property Name="UserId" Type="int" />
           <Property Name="Cantidad" Type="decimal" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="Estado" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="ListaCompra">
           <Key>
@@ -48,7 +49,7 @@
           <Property Name="ListaCompraId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserId" Type="int" />
           <Property Name="FamiliaId" Type="int" />
-          <Property Name="SupermercadoNombre" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="ListaCompraNombre" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="MontoTotal" Type="decimal" Precision="10" Scale="2" Nullable="false" />
           <Property Name="Fecha" Type="date" Nullable="false" />
         </EntityType>
@@ -76,9 +77,6 @@
           <Property Name="ProductoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CategoriaId" Type="int" />
           <Property Name="ProductoNombre" Type="nvarchar" MaxLength="200" Nullable="false" />
-          <Property Name="Precio" Type="decimal" Precision="10" Scale="2" Nullable="false" />
-          <Property Name="Stock" Type="decimal" Precision="5" Scale="0" Nullable="false" />
-          <Property Name="Estado" Type="nvarchar" MaxLength="100" Nullable="false" />
         </EntityType>
         <EntityType Name="Usuario">
           <Key>
@@ -92,25 +90,6 @@
           <Property Name="Email" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="Username" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="Password" Type="nvarchar" MaxLength="200" />
-          <Property Name="FechaNacimiento" Type="date" Nullable="false" />
-        </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'MarketOn.sys.database_firewall_rules' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="database_firewall_rules">
-          <Key>
-            <PropertyRef Name="id" />
-            <PropertyRef Name="name" />
-            <PropertyRef Name="start_ip_address" />
-            <PropertyRef Name="end_ip_address" />
-            <PropertyRef Name="create_date" />
-            <PropertyRef Name="modify_date" />
-          </Key>
-          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="start_ip_address" Type="varchar" MaxLength="45" Nullable="false" />
-          <Property Name="end_ip_address" Type="varchar" MaxLength="45" Nullable="false" />
-          <Property Name="create_date" Type="datetime" Nullable="false" />
-          <Property Name="modify_date" Type="datetime" Nullable="false" />
         </EntityType>
         <Association Name="FK__DetalleLi__Lista__797309D9">
           <End Role="ListaCompra" Type="Self.ListaCompra" Multiplicity="0..1" />
@@ -285,16 +264,6 @@ warning 6002: The table/view 'MarketOn.sys.database_firewall_rules' does not hav
           <EntitySet Name="Login_Detail" EntityType="Self.Login_Detail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Producto" EntityType="Self.Producto" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="database_firewall_rules" EntityType="Self.database_firewall_rules" store:Type="Views" store:Schema="sys">
-            <DefiningQuery>SELECT 
-    [database_firewall_rules].[id] AS [id], 
-    [database_firewall_rules].[name] AS [name], 
-    [database_firewall_rules].[start_ip_address] AS [start_ip_address], 
-    [database_firewall_rules].[end_ip_address] AS [end_ip_address], 
-    [database_firewall_rules].[create_date] AS [create_date], 
-    [database_firewall_rules].[modify_date] AS [modify_date]
-    FROM [sys].[database_firewall_rules] AS [database_firewall_rules]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK__DetalleLi__Lista__797309D9" Association="Self.FK__DetalleLi__Lista__797309D9">
             <End Role="ListaCompra" EntitySet="ListaCompra" />
             <End Role="DetalleListaCompra" EntitySet="DetalleListaCompra" />
@@ -340,325 +309,11 @@ warning 6002: The table/view 'MarketOn.sys.database_firewall_rules' does not hav
             <End Role="Usuario" EntitySet="Usuario" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MarketOnModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Categoria">
-          <Key>
-            <PropertyRef Name="CategoriaId" />
-          </Key>
-          <Property Name="CategoriaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CategoriaNombre" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Descripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Producto" Relationship="Self.FK__Producto__Catego__72C60C4A" FromRole="Categoria" ToRole="Producto" />
-        </EntityType>
-        <EntityType Name="DetalleListaCompra">
-          <Key>
-            <PropertyRef Name="DetalleListaCompraId" />
-          </Key>
-          <Property Name="DetalleListaCompraId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ProductoId" Type="Int32" />
-          <Property Name="ListaCompraId" Type="Int32" />
-          <Property Name="Precio" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
-          <Property Name="Cantidad" Type="Decimal" Precision="5" Scale="0" Nullable="false" />
-          <NavigationProperty Name="ListaCompra" Relationship="Self.FK__DetalleLi__Lista__797309D9" FromRole="DetalleListaCompra" ToRole="ListaCompra" />
-          <NavigationProperty Name="Producto" Relationship="Self.FK__DetalleLi__Produ__787EE5A0" FromRole="DetalleListaCompra" ToRole="Producto" />
-        </EntityType>
-        <EntityType Name="FamiliaCode">
-          <Key>
-            <PropertyRef Name="FamiliaId" />
-          </Key>
-          <Property Name="FamiliaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FamiliaNombre" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="FamiliaCodigo" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Inventario" Relationship="Self.FK__Inventari__Famil__7D439ABD" FromRole="FamiliaCode" ToRole="Inventario" />
-          <NavigationProperty Name="ListaCompra" Relationship="Self.FK__ListaComp__Famil__6E01572D" FromRole="FamiliaCode" ToRole="ListaCompra" />
-          <NavigationProperty Name="Usuario" Relationship="Self.FK__Usuario__Familia__6A30C649" FromRole="FamiliaCode" ToRole="Usuario" />
-        </EntityType>
-        <EntityType Name="Inventario">
-          <Key>
-            <PropertyRef Name="InventarioId" />
-          </Key>
-          <Property Name="InventarioId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ProductoId" Type="Int32" />
-          <Property Name="FamiliaId" Type="Int32" />
-          <Property Name="UserId" Type="Int32" />
-          <Property Name="Cantidad" Type="Decimal" Precision="5" Scale="0" Nullable="false" />
-          <NavigationProperty Name="FamiliaCode" Relationship="Self.FK__Inventari__Famil__7D439ABD" FromRole="Inventario" ToRole="FamiliaCode" />
-          <NavigationProperty Name="Producto" Relationship="Self.FK__Inventari__Produ__7C4F7684" FromRole="Inventario" ToRole="Producto" />
-          <NavigationProperty Name="Usuario" Relationship="Self.FK__Inventari__UserI__7E37BEF6" FromRole="Inventario" ToRole="Usuario" />
-        </EntityType>
-        <EntityType Name="ListaCompra">
-          <Key>
-            <PropertyRef Name="ListaCompraId" />
-          </Key>
-          <Property Name="ListaCompraId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserId" Type="Int32" />
-          <Property Name="FamiliaId" Type="Int32" />
-          <Property Name="SupermercadoNombre" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="MontoTotal" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
-          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
-          <NavigationProperty Name="DetalleListaCompra" Relationship="Self.FK__DetalleLi__Lista__797309D9" FromRole="ListaCompra" ToRole="DetalleListaCompra" />
-          <NavigationProperty Name="FamiliaCode" Relationship="Self.FK__ListaComp__Famil__6E01572D" FromRole="ListaCompra" ToRole="FamiliaCode" />
-          <NavigationProperty Name="Usuario" Relationship="Self.FK__ListaComp__UserI__6D0D32F4" FromRole="ListaCompra" ToRole="Usuario" />
-        </EntityType>
-        <EntityType Name="Login">
-          <Key>
-            <PropertyRef Name="LoginId" />
-          </Key>
-          <Property Name="LoginId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Username" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Login_Detail" Relationship="Self.FK__Login_Det__Login__6477ECF3" FromRole="Login" ToRole="Login_Detail" />
-          <NavigationProperty Name="Usuario" Relationship="Self.FK__Usuario__LoginId__693CA210" FromRole="Login" ToRole="Usuario" />
-        </EntityType>
-        <EntityType Name="Login_Detail">
-          <Key>
-            <PropertyRef Name="LoginDetailId" />
-          </Key>
-          <Property Name="LoginDetailId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="LoginId" Type="Int32" />
-          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
-          <NavigationProperty Name="Login" Relationship="Self.FK__Login_Det__Login__6477ECF3" FromRole="Login_Detail" ToRole="Login" />
-        </EntityType>
-        <EntityType Name="Producto">
-          <Key>
-            <PropertyRef Name="ProductoId" />
-          </Key>
-          <Property Name="ProductoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CategoriaId" Type="Int32" />
-          <Property Name="ProductoNombre" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Precio" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
-          <Property Name="Stock" Type="Decimal" Precision="5" Scale="0" Nullable="false" />
-          <Property Name="Estado" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Categoria" Relationship="Self.FK__Producto__Catego__72C60C4A" FromRole="Producto" ToRole="Categoria" />
-          <NavigationProperty Name="DetalleListaCompra" Relationship="Self.FK__DetalleLi__Produ__787EE5A0" FromRole="Producto" ToRole="DetalleListaCompra" />
-          <NavigationProperty Name="Inventario" Relationship="Self.FK__Inventari__Produ__7C4F7684" FromRole="Producto" ToRole="Inventario" />
-        </EntityType>
-        <EntityType Name="Usuario">
-          <Key>
-            <PropertyRef Name="UserId" />
-          </Key>
-          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="LoginId" Type="Int32" />
-          <Property Name="FamiliaId" Type="Int32" />
-          <Property Name="Nombre" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Apellido" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Username" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="FechaNacimiento" Type="DateTime" Nullable="false" Precision="0" />
-          <NavigationProperty Name="FamiliaCode" Relationship="Self.FK__Usuario__Familia__6A30C649" FromRole="Usuario" ToRole="FamiliaCode" />
-          <NavigationProperty Name="Inventario" Relationship="Self.FK__Inventari__UserI__7E37BEF6" FromRole="Usuario" ToRole="Inventario" />
-          <NavigationProperty Name="ListaCompra" Relationship="Self.FK__ListaComp__UserI__6D0D32F4" FromRole="Usuario" ToRole="ListaCompra" />
-          <NavigationProperty Name="Login" Relationship="Self.FK__Usuario__LoginId__693CA210" FromRole="Usuario" ToRole="Login" />
-        </EntityType>
-        <EntityType Name="database_firewall_rules">
-          <Key>
-            <PropertyRef Name="id" />
-            <PropertyRef Name="name" />
-            <PropertyRef Name="start_ip_address" />
-            <PropertyRef Name="end_ip_address" />
-            <PropertyRef Name="create_date" />
-            <PropertyRef Name="modify_date" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="start_ip_address" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="end_ip_address" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="create_date" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="modify_date" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
-        <Association Name="FK__Producto__Catego__72C60C4A">
-          <End Role="Categoria" Type="Self.Categoria" Multiplicity="0..1" />
-          <End Role="Producto" Type="Self.Producto" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Categoria">
-              <PropertyRef Name="CategoriaId" />
-            </Principal>
-            <Dependent Role="Producto">
-              <PropertyRef Name="CategoriaId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__DetalleLi__Lista__797309D9">
-          <End Role="ListaCompra" Type="Self.ListaCompra" Multiplicity="0..1" />
-          <End Role="DetalleListaCompra" Type="Self.DetalleListaCompra" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ListaCompra">
-              <PropertyRef Name="ListaCompraId" />
-            </Principal>
-            <Dependent Role="DetalleListaCompra">
-              <PropertyRef Name="ListaCompraId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__DetalleLi__Produ__787EE5A0">
-          <End Role="Producto" Type="Self.Producto" Multiplicity="0..1" />
-          <End Role="DetalleListaCompra" Type="Self.DetalleListaCompra" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Producto">
-              <PropertyRef Name="ProductoId" />
-            </Principal>
-            <Dependent Role="DetalleListaCompra">
-              <PropertyRef Name="ProductoId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Inventari__Famil__7D439ABD">
-          <End Role="FamiliaCode" Type="Self.FamiliaCode" Multiplicity="0..1" />
-          <End Role="Inventario" Type="Self.Inventario" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="FamiliaCode">
-              <PropertyRef Name="FamiliaId" />
-            </Principal>
-            <Dependent Role="Inventario">
-              <PropertyRef Name="FamiliaId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__ListaComp__Famil__6E01572D">
-          <End Role="FamiliaCode" Type="Self.FamiliaCode" Multiplicity="0..1" />
-          <End Role="ListaCompra" Type="Self.ListaCompra" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="FamiliaCode">
-              <PropertyRef Name="FamiliaId" />
-            </Principal>
-            <Dependent Role="ListaCompra">
-              <PropertyRef Name="FamiliaId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Usuario__Familia__6A30C649">
-          <End Role="FamiliaCode" Type="Self.FamiliaCode" Multiplicity="0..1" />
-          <End Role="Usuario" Type="Self.Usuario" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="FamiliaCode">
-              <PropertyRef Name="FamiliaId" />
-            </Principal>
-            <Dependent Role="Usuario">
-              <PropertyRef Name="FamiliaId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Inventari__Produ__7C4F7684">
-          <End Role="Producto" Type="Self.Producto" Multiplicity="0..1" />
-          <End Role="Inventario" Type="Self.Inventario" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Producto">
-              <PropertyRef Name="ProductoId" />
-            </Principal>
-            <Dependent Role="Inventario">
-              <PropertyRef Name="ProductoId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Inventari__UserI__7E37BEF6">
-          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
-          <End Role="Inventario" Type="Self.Inventario" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Usuario">
-              <PropertyRef Name="UserId" />
-            </Principal>
-            <Dependent Role="Inventario">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__ListaComp__UserI__6D0D32F4">
-          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
-          <End Role="ListaCompra" Type="Self.ListaCompra" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Usuario">
-              <PropertyRef Name="UserId" />
-            </Principal>
-            <Dependent Role="ListaCompra">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Login_Det__Login__6477ECF3">
-          <End Role="Login" Type="Self.Login" Multiplicity="0..1" />
-          <End Role="Login_Detail" Type="Self.Login_Detail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Login">
-              <PropertyRef Name="LoginId" />
-            </Principal>
-            <Dependent Role="Login_Detail">
-              <PropertyRef Name="LoginId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Usuario__LoginId__693CA210">
-          <End Role="Login" Type="Self.Login" Multiplicity="0..1" />
-          <End Role="Usuario" Type="Self.Usuario" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Login">
-              <PropertyRef Name="LoginId" />
-            </Principal>
-            <Dependent Role="Usuario">
-              <PropertyRef Name="LoginId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="MarketOnEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Categoria" EntityType="Self.Categoria" />
-          <EntitySet Name="DetalleListaCompra" EntityType="Self.DetalleListaCompra" />
-          <EntitySet Name="FamiliaCode" EntityType="Self.FamiliaCode" />
-          <EntitySet Name="Inventario" EntityType="Self.Inventario" />
-          <EntitySet Name="ListaCompra" EntityType="Self.ListaCompra" />
-          <EntitySet Name="Login" EntityType="Self.Login" />
-          <EntitySet Name="Login_Detail" EntityType="Self.Login_Detail" />
-          <EntitySet Name="Producto" EntityType="Self.Producto" />
-          <EntitySet Name="Usuario" EntityType="Self.Usuario" />
-          <EntitySet Name="database_firewall_rules" EntityType="Self.database_firewall_rules" />
-          <AssociationSet Name="FK__Producto__Catego__72C60C4A" Association="Self.FK__Producto__Catego__72C60C4A">
-            <End Role="Categoria" EntitySet="Categoria" />
-            <End Role="Producto" EntitySet="Producto" />
-          </AssociationSet>
-          <AssociationSet Name="FK__DetalleLi__Lista__797309D9" Association="Self.FK__DetalleLi__Lista__797309D9">
-            <End Role="ListaCompra" EntitySet="ListaCompra" />
-            <End Role="DetalleListaCompra" EntitySet="DetalleListaCompra" />
-          </AssociationSet>
-          <AssociationSet Name="FK__DetalleLi__Produ__787EE5A0" Association="Self.FK__DetalleLi__Produ__787EE5A0">
-            <End Role="Producto" EntitySet="Producto" />
-            <End Role="DetalleListaCompra" EntitySet="DetalleListaCompra" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Inventari__Famil__7D439ABD" Association="Self.FK__Inventari__Famil__7D439ABD">
-            <End Role="FamiliaCode" EntitySet="FamiliaCode" />
-            <End Role="Inventario" EntitySet="Inventario" />
-          </AssociationSet>
-          <AssociationSet Name="FK__ListaComp__Famil__6E01572D" Association="Self.FK__ListaComp__Famil__6E01572D">
-            <End Role="FamiliaCode" EntitySet="FamiliaCode" />
-            <End Role="ListaCompra" EntitySet="ListaCompra" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Usuario__Familia__6A30C649" Association="Self.FK__Usuario__Familia__6A30C649">
-            <End Role="FamiliaCode" EntitySet="FamiliaCode" />
-            <End Role="Usuario" EntitySet="Usuario" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Inventari__Produ__7C4F7684" Association="Self.FK__Inventari__Produ__7C4F7684">
-            <End Role="Producto" EntitySet="Producto" />
-            <End Role="Inventario" EntitySet="Inventario" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Inventari__UserI__7E37BEF6" Association="Self.FK__Inventari__UserI__7E37BEF6">
-            <End Role="Usuario" EntitySet="Usuario" />
-            <End Role="Inventario" EntitySet="Inventario" />
-          </AssociationSet>
-          <AssociationSet Name="FK__ListaComp__UserI__6D0D32F4" Association="Self.FK__ListaComp__UserI__6D0D32F4">
-            <End Role="Usuario" EntitySet="Usuario" />
-            <End Role="ListaCompra" EntitySet="ListaCompra" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Login_Det__Login__6477ECF3" Association="Self.FK__Login_Det__Login__6477ECF3">
-            <End Role="Login" EntitySet="Login" />
-            <End Role="Login_Detail" EntitySet="Login_Detail" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Usuario__LoginId__693CA210" Association="Self.FK__Usuario__LoginId__693CA210">
-            <End Role="Login" EntitySet="Login" />
-            <End Role="Usuario" EntitySet="Usuario" />
-          </AssociationSet>
           <FunctionImport Name="sp_alterdiagram">
             <Parameter Name="diagramname" Mode="In" Type="String" />
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
@@ -689,6 +344,59 @@ warning 6002: The table/view 'MarketOn.sys.database_firewall_rules' does not hav
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
+          <EntitySet Name="Categoria" EntityType="MarketOnModel.Categoria" />
+          <EntitySet Name="DetalleListaCompra" EntityType="MarketOnModel.DetalleListaCompra" />
+          <EntitySet Name="FamiliaCode" EntityType="MarketOnModel.FamiliaCode" />
+          <EntitySet Name="Inventario" EntityType="MarketOnModel.Inventario" />
+          <EntitySet Name="ListaCompra" EntityType="MarketOnModel.ListaCompra" />
+          <EntitySet Name="Login" EntityType="MarketOnModel.Login" />
+          <EntitySet Name="Login_Detail" EntityType="MarketOnModel.Login_Detail" />
+          <EntitySet Name="Producto" EntityType="MarketOnModel.Producto" />
+          <EntitySet Name="Usuario" EntityType="MarketOnModel.Usuario" />
+          <AssociationSet Name="FK__Producto__Catego__72C60C4A" Association="MarketOnModel.FK__Producto__Catego__72C60C4A">
+            <End Role="Categoria" EntitySet="Categoria" />
+            <End Role="Producto" EntitySet="Producto" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DetalleLi__Lista__797309D9" Association="MarketOnModel.FK__DetalleLi__Lista__797309D9">
+            <End Role="ListaCompra" EntitySet="ListaCompra" />
+            <End Role="DetalleListaCompra" EntitySet="DetalleListaCompra" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DetalleLi__Produ__787EE5A0" Association="MarketOnModel.FK__DetalleLi__Produ__787EE5A0">
+            <End Role="Producto" EntitySet="Producto" />
+            <End Role="DetalleListaCompra" EntitySet="DetalleListaCompra" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Inventari__Famil__7D439ABD" Association="MarketOnModel.FK__Inventari__Famil__7D439ABD">
+            <End Role="FamiliaCode" EntitySet="FamiliaCode" />
+            <End Role="Inventario" EntitySet="Inventario" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ListaComp__Famil__6E01572D" Association="MarketOnModel.FK__ListaComp__Famil__6E01572D">
+            <End Role="FamiliaCode" EntitySet="FamiliaCode" />
+            <End Role="ListaCompra" EntitySet="ListaCompra" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Usuario__Familia__6A30C649" Association="MarketOnModel.FK__Usuario__Familia__6A30C649">
+            <End Role="FamiliaCode" EntitySet="FamiliaCode" />
+            <End Role="Usuario" EntitySet="Usuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Inventari__Produ__7C4F7684" Association="MarketOnModel.FK__Inventari__Produ__7C4F7684">
+            <End Role="Producto" EntitySet="Producto" />
+            <End Role="Inventario" EntitySet="Inventario" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Inventari__UserI__7E37BEF6" Association="MarketOnModel.FK__Inventari__UserI__7E37BEF6">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Inventario" EntitySet="Inventario" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ListaComp__UserI__6D0D32F4" Association="MarketOnModel.FK__ListaComp__UserI__6D0D32F4">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="ListaCompra" EntitySet="ListaCompra" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Login_Det__Login__6477ECF3" Association="MarketOnModel.FK__Login_Det__Login__6477ECF3">
+            <End Role="Login" EntitySet="Login" />
+            <End Role="Login_Detail" EntitySet="Login_Detail" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Usuario__LoginId__693CA210" Association="MarketOnModel.FK__Usuario__LoginId__693CA210">
+            <End Role="Login" EntitySet="Login" />
+            <End Role="Usuario" EntitySet="Usuario" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -701,122 +409,252 @@ warning 6002: The table/view 'MarketOn.sys.database_firewall_rules' does not hav
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
+        <EntityType Name="Categoria">
+          <Key>
+            <PropertyRef Name="CategoriaId" />
+          </Key>
+          <Property Name="CategoriaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoriaNombre" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Producto" Relationship="MarketOnModel.FK__Producto__Catego__72C60C4A" FromRole="Categoria" ToRole="Producto" />
+        </EntityType>
+        <EntityType Name="DetalleListaCompra">
+          <Key>
+            <PropertyRef Name="DetalleListaCompraId" />
+          </Key>
+          <Property Name="DetalleListaCompraId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductoId" Type="Int32" />
+          <Property Name="ListaCompraId" Type="Int32" />
+          <Property Name="Precio" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="Cantidad" Type="Decimal" Nullable="false" Precision="5" Scale="0" />
+          <Property Name="Estado" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ListaCompra" Relationship="MarketOnModel.FK__DetalleLi__Lista__797309D9" FromRole="DetalleListaCompra" ToRole="ListaCompra" />
+          <NavigationProperty Name="Producto" Relationship="MarketOnModel.FK__DetalleLi__Produ__787EE5A0" FromRole="DetalleListaCompra" ToRole="Producto" />
+        </EntityType>
+        <EntityType Name="FamiliaCode">
+          <Key>
+            <PropertyRef Name="FamiliaId" />
+          </Key>
+          <Property Name="FamiliaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FamiliaNombre" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="FamiliaCodigo" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Inventario" Relationship="MarketOnModel.FK__Inventari__Famil__7D439ABD" FromRole="FamiliaCode" ToRole="Inventario" />
+          <NavigationProperty Name="ListaCompra" Relationship="MarketOnModel.FK__ListaComp__Famil__6E01572D" FromRole="FamiliaCode" ToRole="ListaCompra" />
+          <NavigationProperty Name="Usuario" Relationship="MarketOnModel.FK__Usuario__Familia__6A30C649" FromRole="FamiliaCode" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="Inventario">
+          <Key>
+            <PropertyRef Name="InventarioId" />
+          </Key>
+          <Property Name="InventarioId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductoId" Type="Int32" />
+          <Property Name="FamiliaId" Type="Int32" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="Cantidad" Type="Decimal" Nullable="false" Precision="5" Scale="0" />
+          <Property Name="Estado" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="FamiliaCode" Relationship="MarketOnModel.FK__Inventari__Famil__7D439ABD" FromRole="Inventario" ToRole="FamiliaCode" />
+          <NavigationProperty Name="Producto" Relationship="MarketOnModel.FK__Inventari__Produ__7C4F7684" FromRole="Inventario" ToRole="Producto" />
+          <NavigationProperty Name="Usuario" Relationship="MarketOnModel.FK__Inventari__UserI__7E37BEF6" FromRole="Inventario" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="ListaCompra">
+          <Key>
+            <PropertyRef Name="ListaCompraId" />
+          </Key>
+          <Property Name="ListaCompraId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="FamiliaId" Type="Int32" />
+          <Property Name="ListaCompraNombre" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="MontoTotal" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="DetalleListaCompra" Relationship="MarketOnModel.FK__DetalleLi__Lista__797309D9" FromRole="ListaCompra" ToRole="DetalleListaCompra" />
+          <NavigationProperty Name="FamiliaCode" Relationship="MarketOnModel.FK__ListaComp__Famil__6E01572D" FromRole="ListaCompra" ToRole="FamiliaCode" />
+          <NavigationProperty Name="Usuario" Relationship="MarketOnModel.FK__ListaComp__UserI__6D0D32F4" FromRole="ListaCompra" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="Login">
+          <Key>
+            <PropertyRef Name="LoginId" />
+          </Key>
+          <Property Name="LoginId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Login_Detail" Relationship="MarketOnModel.FK__Login_Det__Login__6477ECF3" FromRole="Login" ToRole="Login_Detail" />
+          <NavigationProperty Name="Usuario" Relationship="MarketOnModel.FK__Usuario__LoginId__693CA210" FromRole="Login" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="Login_Detail">
+          <Key>
+            <PropertyRef Name="LoginDetailId" />
+          </Key>
+          <Property Name="LoginDetailId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LoginId" Type="Int32" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Login" Relationship="MarketOnModel.FK__Login_Det__Login__6477ECF3" FromRole="Login_Detail" ToRole="Login" />
+        </EntityType>
+        <EntityType Name="Producto">
+          <Key>
+            <PropertyRef Name="ProductoId" />
+          </Key>
+          <Property Name="ProductoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoriaId" Type="Int32" />
+          <Property Name="ProductoNombre" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Categoria" Relationship="MarketOnModel.FK__Producto__Catego__72C60C4A" FromRole="Producto" ToRole="Categoria" />
+          <NavigationProperty Name="DetalleListaCompra" Relationship="MarketOnModel.FK__DetalleLi__Produ__787EE5A0" FromRole="Producto" ToRole="DetalleListaCompra" />
+          <NavigationProperty Name="Inventario" Relationship="MarketOnModel.FK__Inventari__Produ__7C4F7684" FromRole="Producto" ToRole="Inventario" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LoginId" Type="Int32" />
+          <Property Name="FamiliaId" Type="Int32" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Apellido" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="FamiliaCode" Relationship="MarketOnModel.FK__Usuario__Familia__6A30C649" FromRole="Usuario" ToRole="FamiliaCode" />
+          <NavigationProperty Name="Inventario" Relationship="MarketOnModel.FK__Inventari__UserI__7E37BEF6" FromRole="Usuario" ToRole="Inventario" />
+          <NavigationProperty Name="ListaCompra" Relationship="MarketOnModel.FK__ListaComp__UserI__6D0D32F4" FromRole="Usuario" ToRole="ListaCompra" />
+          <NavigationProperty Name="Login" Relationship="MarketOnModel.FK__Usuario__LoginId__693CA210" FromRole="Usuario" ToRole="Login" />
+        </EntityType>
+        <Association Name="FK__Producto__Catego__72C60C4A">
+          <End Type="MarketOnModel.Categoria" Role="Categoria" Multiplicity="0..1" />
+          <End Type="MarketOnModel.Producto" Role="Producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categoria">
+              <PropertyRef Name="CategoriaId" />
+            </Principal>
+            <Dependent Role="Producto">
+              <PropertyRef Name="CategoriaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DetalleLi__Lista__797309D9">
+          <End Type="MarketOnModel.ListaCompra" Role="ListaCompra" Multiplicity="0..1" />
+          <End Type="MarketOnModel.DetalleListaCompra" Role="DetalleListaCompra" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ListaCompra">
+              <PropertyRef Name="ListaCompraId" />
+            </Principal>
+            <Dependent Role="DetalleListaCompra">
+              <PropertyRef Name="ListaCompraId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DetalleLi__Produ__787EE5A0">
+          <End Type="MarketOnModel.Producto" Role="Producto" Multiplicity="0..1" />
+          <End Type="MarketOnModel.DetalleListaCompra" Role="DetalleListaCompra" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="ProductoId" />
+            </Principal>
+            <Dependent Role="DetalleListaCompra">
+              <PropertyRef Name="ProductoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Inventari__Famil__7D439ABD">
+          <End Type="MarketOnModel.FamiliaCode" Role="FamiliaCode" Multiplicity="0..1" />
+          <End Type="MarketOnModel.Inventario" Role="Inventario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FamiliaCode">
+              <PropertyRef Name="FamiliaId" />
+            </Principal>
+            <Dependent Role="Inventario">
+              <PropertyRef Name="FamiliaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ListaComp__Famil__6E01572D">
+          <End Type="MarketOnModel.FamiliaCode" Role="FamiliaCode" Multiplicity="0..1" />
+          <End Type="MarketOnModel.ListaCompra" Role="ListaCompra" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FamiliaCode">
+              <PropertyRef Name="FamiliaId" />
+            </Principal>
+            <Dependent Role="ListaCompra">
+              <PropertyRef Name="FamiliaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Usuario__Familia__6A30C649">
+          <End Type="MarketOnModel.FamiliaCode" Role="FamiliaCode" Multiplicity="0..1" />
+          <End Type="MarketOnModel.Usuario" Role="Usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FamiliaCode">
+              <PropertyRef Name="FamiliaId" />
+            </Principal>
+            <Dependent Role="Usuario">
+              <PropertyRef Name="FamiliaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Inventari__Produ__7C4F7684">
+          <End Type="MarketOnModel.Producto" Role="Producto" Multiplicity="0..1" />
+          <End Type="MarketOnModel.Inventario" Role="Inventario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="ProductoId" />
+            </Principal>
+            <Dependent Role="Inventario">
+              <PropertyRef Name="ProductoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Inventari__UserI__7E37BEF6">
+          <End Type="MarketOnModel.Usuario" Role="Usuario" Multiplicity="0..1" />
+          <End Type="MarketOnModel.Inventario" Role="Inventario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Inventario">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ListaComp__UserI__6D0D32F4">
+          <End Type="MarketOnModel.Usuario" Role="Usuario" Multiplicity="0..1" />
+          <End Type="MarketOnModel.ListaCompra" Role="ListaCompra" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="ListaCompra">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Login_Det__Login__6477ECF3">
+          <End Type="MarketOnModel.Login" Role="Login" Multiplicity="0..1" />
+          <End Type="MarketOnModel.Login_Detail" Role="Login_Detail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Login">
+              <PropertyRef Name="LoginId" />
+            </Principal>
+            <Dependent Role="Login_Detail">
+              <PropertyRef Name="LoginId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Usuario__LoginId__693CA210">
+          <End Type="MarketOnModel.Login" Role="Login" Multiplicity="0..1" />
+          <End Type="MarketOnModel.Usuario" Role="Usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Login">
+              <PropertyRef Name="LoginId" />
+            </Principal>
+            <Dependent Role="Usuario">
+              <PropertyRef Name="LoginId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="MarketOnModelStoreContainer" CdmEntityContainer="MarketOnEntities">
-          <EntitySetMapping Name="Categoria">
-            <EntityTypeMapping TypeName="MarketOnModel.Categoria">
-              <MappingFragment StoreEntitySet="Categoria">
-                <ScalarProperty Name="CategoriaId" ColumnName="CategoriaId" />
-                <ScalarProperty Name="CategoriaNombre" ColumnName="CategoriaNombre" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="DetalleListaCompra">
-            <EntityTypeMapping TypeName="MarketOnModel.DetalleListaCompra">
-              <MappingFragment StoreEntitySet="DetalleListaCompra">
-                <ScalarProperty Name="DetalleListaCompraId" ColumnName="DetalleListaCompraId" />
-                <ScalarProperty Name="ProductoId" ColumnName="ProductoId" />
-                <ScalarProperty Name="ListaCompraId" ColumnName="ListaCompraId" />
-                <ScalarProperty Name="Precio" ColumnName="Precio" />
-                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="FamiliaCode">
-            <EntityTypeMapping TypeName="MarketOnModel.FamiliaCode">
-              <MappingFragment StoreEntitySet="FamiliaCode">
-                <ScalarProperty Name="FamiliaId" ColumnName="FamiliaId" />
-                <ScalarProperty Name="FamiliaNombre" ColumnName="FamiliaNombre" />
-                <ScalarProperty Name="FamiliaCodigo" ColumnName="FamiliaCodigo" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Inventario">
-            <EntityTypeMapping TypeName="MarketOnModel.Inventario">
-              <MappingFragment StoreEntitySet="Inventario">
-                <ScalarProperty Name="InventarioId" ColumnName="InventarioId" />
-                <ScalarProperty Name="ProductoId" ColumnName="ProductoId" />
-                <ScalarProperty Name="FamiliaId" ColumnName="FamiliaId" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ListaCompra">
-            <EntityTypeMapping TypeName="MarketOnModel.ListaCompra">
-              <MappingFragment StoreEntitySet="ListaCompra">
-                <ScalarProperty Name="ListaCompraId" ColumnName="ListaCompraId" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="FamiliaId" ColumnName="FamiliaId" />
-                <ScalarProperty Name="SupermercadoNombre" ColumnName="SupermercadoNombre" />
-                <ScalarProperty Name="MontoTotal" ColumnName="MontoTotal" />
-                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Login">
-            <EntityTypeMapping TypeName="MarketOnModel.Login">
-              <MappingFragment StoreEntitySet="Login">
-                <ScalarProperty Name="LoginId" ColumnName="LoginId" />
-                <ScalarProperty Name="Username" ColumnName="Username" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Login_Detail">
-            <EntityTypeMapping TypeName="MarketOnModel.Login_Detail">
-              <MappingFragment StoreEntitySet="Login_Detail">
-                <ScalarProperty Name="LoginDetailId" ColumnName="LoginDetailId" />
-                <ScalarProperty Name="LoginId" ColumnName="LoginId" />
-                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Producto">
-            <EntityTypeMapping TypeName="MarketOnModel.Producto">
-              <MappingFragment StoreEntitySet="Producto">
-                <ScalarProperty Name="ProductoId" ColumnName="ProductoId" />
-                <ScalarProperty Name="CategoriaId" ColumnName="CategoriaId" />
-                <ScalarProperty Name="ProductoNombre" ColumnName="ProductoNombre" />
-                <ScalarProperty Name="Precio" ColumnName="Precio" />
-                <ScalarProperty Name="Stock" ColumnName="Stock" />
-                <ScalarProperty Name="Estado" ColumnName="Estado" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Usuario">
-            <EntityTypeMapping TypeName="MarketOnModel.Usuario">
-              <MappingFragment StoreEntitySet="Usuario">
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="LoginId" ColumnName="LoginId" />
-                <ScalarProperty Name="FamiliaId" ColumnName="FamiliaId" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Username" ColumnName="Username" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="FechaNacimiento" ColumnName="FechaNacimiento" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="database_firewall_rules">
-            <EntityTypeMapping TypeName="MarketOnModel.database_firewall_rules">
-              <MappingFragment StoreEntitySet="database_firewall_rules">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="start_ip_address" ColumnName="start_ip_address" />
-                <ScalarProperty Name="end_ip_address" ColumnName="end_ip_address" />
-                <ScalarProperty Name="create_date" ColumnName="create_date" />
-                <ScalarProperty Name="modify_date" ColumnName="modify_date" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="MarketOnModel.Store.sp_alterdiagram" />
           <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="MarketOnModel.Store.sp_creatediagram" />
           <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="MarketOnModel.Store.sp_dropdiagram" />
@@ -841,6 +679,101 @@ warning 6002: The table/view 'MarketOn.sys.database_firewall_rules' does not hav
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="MarketOnModel.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="MarketOnModel.Store.sp_upgraddiagrams" />
+          <EntitySetMapping Name="Categoria">
+            <EntityTypeMapping TypeName="MarketOnModel.Categoria">
+              <MappingFragment StoreEntitySet="Categoria">
+                <ScalarProperty Name="CategoriaNombre" ColumnName="CategoriaNombre" />
+                <ScalarProperty Name="CategoriaId" ColumnName="CategoriaId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DetalleListaCompra">
+            <EntityTypeMapping TypeName="MarketOnModel.DetalleListaCompra">
+              <MappingFragment StoreEntitySet="DetalleListaCompra">
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+                <ScalarProperty Name="ListaCompraId" ColumnName="ListaCompraId" />
+                <ScalarProperty Name="ProductoId" ColumnName="ProductoId" />
+                <ScalarProperty Name="DetalleListaCompraId" ColumnName="DetalleListaCompraId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FamiliaCode">
+            <EntityTypeMapping TypeName="MarketOnModel.FamiliaCode">
+              <MappingFragment StoreEntitySet="FamiliaCode">
+                <ScalarProperty Name="FamiliaCodigo" ColumnName="FamiliaCodigo" />
+                <ScalarProperty Name="FamiliaNombre" ColumnName="FamiliaNombre" />
+                <ScalarProperty Name="FamiliaId" ColumnName="FamiliaId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Inventario">
+            <EntityTypeMapping TypeName="MarketOnModel.Inventario">
+              <MappingFragment StoreEntitySet="Inventario">
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="FamiliaId" ColumnName="FamiliaId" />
+                <ScalarProperty Name="ProductoId" ColumnName="ProductoId" />
+                <ScalarProperty Name="InventarioId" ColumnName="InventarioId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ListaCompra">
+            <EntityTypeMapping TypeName="MarketOnModel.ListaCompra">
+              <MappingFragment StoreEntitySet="ListaCompra">
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="MontoTotal" ColumnName="MontoTotal" />
+                <ScalarProperty Name="ListaCompraNombre" ColumnName="ListaCompraNombre" />
+                <ScalarProperty Name="FamiliaId" ColumnName="FamiliaId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ListaCompraId" ColumnName="ListaCompraId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Login">
+            <EntityTypeMapping TypeName="MarketOnModel.Login">
+              <MappingFragment StoreEntitySet="Login">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="LoginId" ColumnName="LoginId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Login_Detail">
+            <EntityTypeMapping TypeName="MarketOnModel.Login_Detail">
+              <MappingFragment StoreEntitySet="Login_Detail">
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="LoginId" ColumnName="LoginId" />
+                <ScalarProperty Name="LoginDetailId" ColumnName="LoginDetailId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Producto">
+            <EntityTypeMapping TypeName="MarketOnModel.Producto">
+              <MappingFragment StoreEntitySet="Producto">
+                <ScalarProperty Name="ProductoNombre" ColumnName="ProductoNombre" />
+                <ScalarProperty Name="CategoriaId" ColumnName="CategoriaId" />
+                <ScalarProperty Name="ProductoId" ColumnName="ProductoId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuario">
+            <EntityTypeMapping TypeName="MarketOnModel.Usuario">
+              <MappingFragment StoreEntitySet="Usuario">
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="FamiliaId" ColumnName="FamiliaId" />
+                <ScalarProperty Name="LoginId" ColumnName="LoginId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

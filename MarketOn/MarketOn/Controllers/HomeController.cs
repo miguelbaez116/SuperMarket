@@ -40,16 +40,17 @@ namespace MarketOn.Controllers
         public ActionResult CrearProducto(string nombreProducto, string categoriaId)
         {
             var db = new DataMarketOn.MarketOnEntities();
-            var producto = new Producto();
+            
 
             var idCategoria = Int32.Parse(categoriaId);
             var validacion = true;
 
-            producto.ProductoNombre = nombreProducto;
-            producto.CategoriaId = idCategoria;
-            producto.Estado = "N/A";
-            producto.Precio = 0;
-            producto.Stock = 0;
+            var producto = new Producto
+            {
+                ProductoNombre = nombreProducto,
+                CategoriaId = idCategoria
+            };
+
 
             db.Producto.Add(producto);
             db.SaveChanges();
@@ -60,17 +61,19 @@ namespace MarketOn.Controllers
         public ActionResult AgregarProducto(string productoId, string Cantidad)
         {
             var db = new DataMarketOn.MarketOnEntities();
-            var inventario = new Inventario();
 
             var idProducto = Int32.Parse(productoId);
             var cantidad = Decimal.Parse(Cantidad);
             var validacion = true;
             var usuario = HttpContext.GetUsuario();
 
-            inventario.ProductoId = idProducto;
-            inventario.FamiliaId = usuario.FamiliaId;
-            inventario.UserId = usuario.UserId;
-            inventario.Cantidad = cantidad;
+            var inventario = new Inventario
+            {
+                ProductoId = idProducto,
+                FamiliaId = usuario.FamiliaId,
+                UserId = usuario.UserId,
+                Cantidad = cantidad
+            };
 
             db.Inventario.Add(inventario);
             db.SaveChanges();
@@ -80,7 +83,6 @@ namespace MarketOn.Controllers
         public ActionResult EliminarProducto(string inventarioId)
         {
             var db = new DataMarketOn.MarketOnEntities();
-            var inventario = new Inventario();
 
             var idInventario = Int32.Parse(inventarioId);
             var validacion = true;
@@ -95,7 +97,6 @@ namespace MarketOn.Controllers
         public ActionResult ModificarProducto(string InventarioId, string Cantidad)
         {
             var db = new DataMarketOn.MarketOnEntities();
-            var inventario = new Inventario();
 
             var idInventario = Int32.Parse(InventarioId);
             var cantidad = Decimal.Parse(Cantidad);
@@ -159,10 +160,11 @@ namespace MarketOn.Controllers
             var db = new DataMarketOn.MarketOnEntities();
             var validacion = true;
 
-            var FamiliaCode = new FamiliaCode();
-
-            FamiliaCode.FamiliaNombre = nombreFamilia;
-            FamiliaCode.FamiliaCodigo = nombreFamilia;
+            var FamiliaCode = new FamiliaCode
+            {
+                FamiliaNombre = nombreFamilia,
+                FamiliaCodigo = nombreFamilia
+            };
 
             db.FamiliaCode.Add(FamiliaCode);
             db.SaveChanges();

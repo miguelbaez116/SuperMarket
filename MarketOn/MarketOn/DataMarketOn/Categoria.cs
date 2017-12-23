@@ -21,7 +21,6 @@ namespace MarketOn.DataMarketOn
     
         public int CategoriaId { get; set; }
         public string CategoriaNombre { get; set; }
-        public string Descripcion { get; set; }
     
         public virtual ICollection<Producto> Producto { get; set; }
     }

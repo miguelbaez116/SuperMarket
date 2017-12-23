@@ -6,7 +6,7 @@
 
 <div class="row">
     <div class="text-center">
-        <h3> Detalle Lista - @Model.ListaCompra.SupermercadoNombre</h3>
+        <h3> Detalle Lista - @Model.ListaCompra.ListaCompraNombre</h3>
     </div>
     <div class="row">
         <table class="table table-responsive text-center ">
@@ -19,12 +19,13 @@
             </thead>
             <tbody>
                 @{
-                    foreach (var listaProductos in Model.ListaProducto)
+                    foreach (var listaProductos in Model.ListaProductoCompra)
                     {
                         <tr>
                             <td>@listaProductos.ProductoNombre</td>
-                            <td>@listaProductos.Stock</td>
-                            <td>Aun no pienso bien</td>
+                            <td>@listaProductos.Cantidad</td>
+                            @*<td>@listaProductos.Estado</td>*@
+                            <td>Chekbox</td>
                         </tr>
                     }
                 }

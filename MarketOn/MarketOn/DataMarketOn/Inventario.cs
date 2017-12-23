@@ -19,6 +19,7 @@ namespace MarketOn.DataMarketOn
         public Nullable<int> FamiliaId { get; set; }
         public Nullable<int> UserId { get; set; }
         public decimal Cantidad { get; set; }
+        public string Estado { get; set; }
     
         public virtual FamiliaCode FamiliaCode { get; set; }
         public virtual Producto Producto { get; set; }

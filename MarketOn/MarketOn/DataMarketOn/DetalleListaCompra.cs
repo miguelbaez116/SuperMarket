@@ -19,6 +19,7 @@ namespace MarketOn.DataMarketOn
         public Nullable<int> ListaCompraId { get; set; }
         public decimal Precio { get; set; }
         public decimal Cantidad { get; set; }
+        public string Estado { get; set; }
     
         public virtual ListaCompra ListaCompra { get; set; }
         public virtual Producto Producto { get; set; }
