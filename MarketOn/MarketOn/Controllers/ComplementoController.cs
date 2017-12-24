@@ -45,7 +45,8 @@ namespace MarketOn.Controllers
                                        {
                                            ProductoNombre = P.ProductoNombre,
                                            Cantidad = DC.Cantidad,
-                                           Estado = DC.Estado
+                                           Estado = DC.Estado,
+                                           DetalleListaCompraId = DC.DetalleListaCompraId
                                        }).ToList(),
                 ListaCompra = db.ListaCompra.Where(l => l.ListaCompraId == id).FirstOrDefault(),
                 Usuario = usuario
@@ -114,6 +115,18 @@ namespace MarketOn.Controllers
             return Json(new { validacion });
         }
 
+        public void CambioEstado(string idProducto, string valueChk)
+        {
+            var db = new DataMarketOn.MarketOnEntities();
 
+            var ProductoId = Int32.Parse(idProducto);        
+
+            var productoDetalleCompra = db.DetalleListaCompra.Find(ProductoId);
+            productoDetalleCompra.Estado = valueChk;
+
+            db.Entry(productoDetalleCompra).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+
+        }
     }
 }

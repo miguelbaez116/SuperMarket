@@ -38,5 +38,7 @@ namespace MarketOn.Models
         public string ProductoNombre { get; set; }
         public decimal Cantidad { get; set; }
         public string Estado { get; set; }
+        public int DetalleListaCompraId { get; set; }
+
     }
 }

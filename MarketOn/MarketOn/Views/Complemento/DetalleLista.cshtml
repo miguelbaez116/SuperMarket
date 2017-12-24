@@ -24,8 +24,16 @@
                         <tr>
                             <td>@listaProductos.ProductoNombre</td>
                             <td>@listaProductos.Cantidad</td>
-                            @*<td>@listaProductos.Estado</td>*@
-                            <td>Chekbox</td>
+                            <td>
+                                <label class="custom-control custom-checkbox">
+                                    @{
+                                        if (@listaProductos.Estado == "True")
+                                        {<input type="checkbox" class="custom-control-input chkValue" id="@listaProductos.DetalleListaCompraId" checked />}
+                                        else
+                                        {<input type="checkbox" class="custom-control-input chkValue" id="@listaProductos.DetalleListaCompraId" />}
+                                    }
+                                </label>
+                            </td>
                         </tr>
                     }
                 }

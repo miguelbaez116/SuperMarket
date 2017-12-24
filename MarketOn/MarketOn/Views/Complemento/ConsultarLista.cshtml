@@ -208,11 +208,24 @@
                 ListaCompraId = this.id;
                 var ruta = baseUrl + "Complemento/DetalleLista/" + ListaCompraId;
 
-                $.get(ruta,null, function(response)
-                {
+                $.get(ruta, null, function (response) {
                     $("#ContenedorModal").html(response)
                     $("#myModal").modal("show")
-                })
+                }).then(function () {
+                    $(".chkValue").click(function (e) {
+                        //e.preventDefault();
+                        var idProducto = this.id;
+                        var valueChk = $(this)["0"].checked;
+                        $.ajax({
+                            url: baseUrl + "Complemento/CambioEstado",
+                            type: "POST",
+                            data: JSON.stringify({ 'idProducto': idProducto, 'valueChk': valueChk }),
+                            dataType: "json",
+                            traditional: true,
+                            contentType: "application/json; charset=utf-8"
+                        });
+                    });
+                });
             });
         });
 
@@ -285,7 +298,8 @@
                             ProductoId: ProductoId,
                             Cantidad: Cantidad,
                             ListaCompraId: ListaCompraId,
-                            Precio: 0
+                            Precio: 0,
+                            Estado: "False"
                         };
                         listaProductos.push(obj)
                     } 
