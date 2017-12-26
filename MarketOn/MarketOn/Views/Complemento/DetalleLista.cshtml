@@ -4,7 +4,6 @@
     Layout = "~/Views/Shared/_BlankLayout.cshtml";
 }
 
-<div class="row">
     <div class="text-center">
         <h3> Detalle Lista - @Model.ListaCompra.ListaCompraNombre</h3>
     </div>
@@ -12,7 +11,7 @@
         <table class="table table-responsive text-center ">
             <thead>
                 <tr>
-                    <th style="text-align:center">Nombre de Producto</th>
+                    <th style="text-align: center;width: 35%;">Nombre de Producto</th>
                     <th style="text-align:center">Cantidad</th>
                     <th style="text-align:center">Estado</th>
                 </tr>
@@ -34,10 +33,18 @@
                                     }
                                 </label>
                             </td>
+                            <td><a href="" id="@listaProductos.DetalleListaCompraId" class="btnElim glyphicon glyphicon-remove"></a></td>
                         </tr>
                     }
                 }
             </tbody>
         </table>
     </div>
-</div>
+    <div class="row">
+        <div class="col-md-6">
+            <a href="#" class="btn btn-danger InputFull">Bandeja</a>
+        </div>
+        <div class="col-md-6">
+            <a href="#" class="btn btn-danger InputFull">Finalizar</a>
+        </div>
+    </div>
