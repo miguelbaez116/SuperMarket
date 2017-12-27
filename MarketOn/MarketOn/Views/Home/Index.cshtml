@@ -9,6 +9,14 @@
         max-width: 1000px;
         width: 100%;
     }
+
+    .ajs-close {
+        float: right;
+    }
+
+    .ajs-primary {
+        text-align: right !important;
+    }
 </style>
 <div class="row">
     <h1 class="text-center">MarketOn</h1>
@@ -52,7 +60,7 @@
 
 <div class="modal fade" id="modalCrearProducto">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content"> 
             <div class="modal-header">
                 <button type="button" style="position: absolute;top: 10%;left: 90%;" class="close" data-dismiss="modal">&times;</button>
             </div>
@@ -237,23 +245,26 @@
 
                 var inventarioId = this.id;
 
-                $.ajax({
-                    url: baseUrl + "Home/EliminarProducto",
-                    type: "POST",
-                    data: JSON.stringify({ 'inventarioId': inventarioId}),
-                    dataType: "json",
-                    traditional: true,
-                    contentType: "application/json; charset=utf-8",
-                    success: function (data) {
-                        if (data.validacion == true) {
-                            alertify.success('Producto eliminado correctamente!');
-                            window.location.href = data.url;
+                alertify.confirm('Eliminar', 'Esta seguro que desea eliminar este producto de inventario?', function () {
+
+                    $.ajax({
+                        url: baseUrl + "Home/EliminarProducto",
+                        type: "POST",
+                        data: JSON.stringify({ 'inventarioId': inventarioId }),
+                        dataType: "json",
+                        traditional: true,
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            if (data.validacion == true) {
+                                alertify.success('Producto eliminado correctamente!');
+                                window.location.href = data.url;
+                            }
+                        },
+                        error: function () {
+                            alertify.error("Error eliminando producto!");
                         }
-                    },
-                    error: function () {
-                        alertify.error("Error eliminando producto!");
-                    }
-                });
+                    });
+                }, function () {});
             });
         });
 
